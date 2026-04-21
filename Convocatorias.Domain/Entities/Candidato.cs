@@ -1,10 +1,13 @@
 ﻿namespace Convocatorias.Domain.Entities
 {
-    public class Candidato
+    internal class Candidato
     {
        public int Id { get; set; }
        public string Nombre { get; set; }
        public string Apellido { get; set; }
         public string Email { get; set; }
+
+        //Coleccion de postulaciones
+        public ICollection<Postulacion> Postulaciones { get; set; } = new List<Postulacion>();
     }
 }

@@ -17,6 +17,5 @@ namespace Convocatorias.Domain.Entities
     
         public int AreaId { get; set; }
 
-        // Relacion con Candidato
     }
 }

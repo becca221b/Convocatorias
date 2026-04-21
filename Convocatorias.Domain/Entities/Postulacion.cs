@@ -10,11 +10,11 @@ namespace Convocatorias.Domain.Entities
     {
         public int Id { get; set; }
         public int ConvocatoriaId { get; set; }
-        public int PostulanteId { get; set; }
+        public int CandidatoId { get; set; }
         public DateTime FechaPostulacion { get; set; }
 
         // Relaciones
         public Convocatoria Convocatoria { get; set; }
-        public Candidato Postulante { get; set; }
+        public Candidato Candidato { get; set; }
     }
 }
