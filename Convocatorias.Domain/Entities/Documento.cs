@@ -1,21 +1,26 @@
 ﻿using Convocatorias.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Convocatorias.Domain.Entities
 {
-    internal class Documento
+    public class Documento
     {
-        public int Id { get; set; }
-        public string Tipo { get; set; } // Ejemplo: "cv", "Certificado", "Constancia".
-        public string Url { get; set; } // Ruta donde se almacena el archivo
+        public Guid Id { get; private set; }
+        public string Tipo { get; private set; } // Ejemplo: "cv", "Certificado", "Constancia".
+        public string Url { get; private set; } // Ruta donde se almacena el archivo
         
-        public TipoArea TipoArea { get; set; } // Ejemplo: "Experiencia Docente", "Educacion", "Experiencia No Universitaria", "Investigacion", "Extensión"
+        public TipoArea TipoArea { get; private set; } // Ejemplo: "Experiencia Docente", "Educacion", "Experiencia No Universitaria", "Investigacion", "Extensión"
     
-        public int AreaId { get; set; }
+        public int AreaId { get; private set; }
+
+        public Documento(TipoArea tipoArea, int areaId, string tipo, string url)
+        {
+            Id = Guid.NewGuid();
+            TipoArea = tipoArea;
+            AreaId = areaId;
+            Tipo = tipo;
+            Url = url;
+        }
 
     }
 }
