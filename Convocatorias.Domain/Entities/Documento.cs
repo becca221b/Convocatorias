@@ -3,22 +3,31 @@
 
 namespace Convocatorias.Domain.Entities
 {
-    public class Documento
+    public sealed class Documento
     {
         public Guid Id { get; private set; }
-        public string Tipo { get; private set; } // Ejemplo: "cv", "Certificado", "Constancia".
+        public string TipoDocumento { get; private set; } // Ejemplo: "cv", "Certificado", "Constancia".
         public string Url { get; private set; } // Ruta donde se almacena el archivo
         
-        public TipoArea TipoArea { get; private set; } // Ejemplo: "Experiencia Docente", "Educacion", "Experiencia No Universitaria", "Investigacion", "Extensión"
+        //public TipoArea TipoArea { get; private set; } // Ejemplo: "Experiencia Docente", "Educacion", "Experiencia No Universitaria", "Investigacion", "Extensión"
     
-        public int AreaId { get; private set; }
+        //public Guid AreaId { get; private set; }
 
-        public Documento(TipoArea tipoArea, int areaId, string tipo, string url)
+        private Documento() { }
+
+        public Documento(  string tipo, string url)
         {
+                if (string.IsNullOrWhiteSpace(tipo))
+                    throw new ArgumentException("El tipo de documento no puede estar vacío.", nameof(tipo));
+                
+                if (string.IsNullOrWhiteSpace(url))
+                    throw new ArgumentException("La URL del documento no puede estar vacía.", nameof(url));
+                if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                    throw new ArgumentException("La URL del documento no es válida.", nameof(url));
             Id = Guid.NewGuid();
-            TipoArea = tipoArea;
-            AreaId = areaId;
-            Tipo = tipo;
+            //TipoArea = tipoArea;
+            //AreaId = areaId;
+            TipoDocumento = tipo;
             Url = url;
         }
 
