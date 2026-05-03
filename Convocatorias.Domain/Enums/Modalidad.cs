@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Convocatorias.Domain.Enums
 {
-    public enum Status
+    public enum Modalidad
     {
-        Abierta = 1,
-        Cerrada = 2
+        Presencial = 1,
+        Virtual = 2,
     }
 }
