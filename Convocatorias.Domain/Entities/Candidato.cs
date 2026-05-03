@@ -13,6 +13,7 @@
        // private readonly List<Experiencia> _experiencias = new ();
        // public IReadOnlyCollection<Experiencia> Experiencias => _experiencias;
 
+        private Candidato() { }
         public Candidato(string nombre, string apellido, string email)
         {
             if (string.IsNullOrWhiteSpace(nombre))
@@ -20,8 +21,8 @@
             
             if (string.IsNullOrWhiteSpace(apellido))
                 throw new ArgumentException("El apellido no puede estar vacío.", nameof(apellido));
-            
-            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+
+            if (!System.Net.Mail.MailAddress.TryCreate(email, out _))
                 throw new ArgumentException("El email no es válido.", nameof(email));
 
             Id = Guid.NewGuid();
@@ -29,7 +30,7 @@
             Apellido = apellido;
             Email = email;
         }
-
+        
         public void AgregarEducacion(Educacion educacion)
         {
             if (educacion == null)
