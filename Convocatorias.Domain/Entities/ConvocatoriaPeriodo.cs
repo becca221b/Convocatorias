@@ -22,7 +22,15 @@ namespace Convocatorias.Domain.Entities
                 AsignadoEn = DateTime.UtcNow
             };
         }
-        internal void DesactivarComoActual() {
+
+        public void MarcarComoActual()
+        {
+            EsActual = true;
+            AsignadoEn = DateTime.UtcNow;
+        }
+
+        public void MarcarComoNoActual()
+        {
             EsActual = false;
         }
     }

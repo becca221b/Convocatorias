@@ -32,10 +32,10 @@ namespace Convocatorias.Domain.Entities
             FechaFin = fechaFin;
         }
 
-        public bool EstaVigente()
+        public bool EstaVigente(DateTime fechaActual)
         {
-            var ahora = DateTime.UtcNow;
-            return FechaInicio <= ahora && ahora <= FechaFin;
+           
+            return FechaInicio <= fechaActual && fechaActual <= FechaFin;
         }
     }
 }

@@ -66,31 +66,26 @@ namespace Convocatorias.Domain.Entities
                 throw new ArgumentException("El período debe ser válido");
             }
 
-            var actual = _periodos.FirstOrDefault(p => p.ConvocatoriaId == Id);
-
-            actual?.DesactivarComoActual();
+            foreach (var periodo in _periodos)
+            {
+                periodo.MarcarComoNoActual();
+            }
 
             _periodos.Add(ConvocatoriaPeriodo.Crear(Id, nuevoPeriodoId));
         }
 
-        public Guid ObtenerPeriodoActualId()
+        public Guid ObtenerPeriodo(Guid periodoId)
         {
-            var actual = _periodos.FirstOrDefault(p => p.ConvocatoriaId == Id && p.EsActual);
-            if (actual == null)
-            {
-                throw new InvalidOperationException("No se encontró un período actual para esta convocatoria");
-            }
-
-            return actual.PeriodoId;
+            
+            return _periodos.FirstOrDefault(p => p.PeriodoId == periodoId)?.PeriodoId ?? Guid.Empty;
 
 
         }
 
-        public bool EstaDisponible(Func<Guid, Periodo> obtenerPeriodo)
+        public void ValidarAbierta()
         {
-            var periodoActualId = ObtenerPeriodoActualId();
-            var periodoActual = obtenerPeriodo(periodoActualId);
-            return Status == Status.Abierta && periodoActual.EstaVigente();
+            if (Status != Status.Abierta)
+                throw new Exception("La convocatoria está cerrada");
         }
     }
 }
