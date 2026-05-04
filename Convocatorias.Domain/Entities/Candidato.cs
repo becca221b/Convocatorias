@@ -10,8 +10,11 @@
        private readonly List<Educacion> _educaciones = new ();
        public IReadOnlyCollection<Educacion> Educaciones => _educaciones;
 
-       // private readonly List<Experiencia> _experiencias = new ();
-       // public IReadOnlyCollection<Experiencia> Experiencias => _experiencias;
+       private readonly List<ExperienciaDocente> _experienciasDocente = new ();
+       public IReadOnlyCollection<ExperienciaDocente> ExperienciasDocente => _experienciasDocente;
+
+        private readonly List<ExperienciaInvExt> _experienciasInvExt = new ();
+        public IReadOnlyCollection<ExperienciaInvExt> ExperienciasInvExt => _experienciasInvExt;
 
         private Candidato() { }
         public Candidato(string nombre, string apellido, string email)
@@ -38,10 +41,16 @@
             _educaciones.Add(educacion);
         }
 
-        /*
-        public void AgregarExperiencia(Experiencia experiencia)
+        public void AgregarExperienciaDocente(ExperienciaDocente experiencia)
         {
-            // Implementar lógica para agregar experiencia laboral
-        }*/
+            if (experiencia == null)
+                throw new ArgumentNullException(nameof(experiencia), "La experiencia docente no puede ser nula.");
+            _experienciasDocente.Add(experiencia);
+        }
+
+        public void AgregarExperienciaInvExt(ExperienciaInvExt experiencia)
+        {
+            _experienciasInvExt.Add(experiencia);
+        }
     }
 }
