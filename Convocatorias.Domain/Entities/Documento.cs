@@ -9,9 +9,7 @@ namespace Convocatorias.Domain.Entities
         public string TipoDocumento { get; private set; } // Ejemplo: "cv", "Certificado", "Constancia".
         public string Url { get; private set; } // Ruta donde se almacena el archivo
         
-        //public TipoArea TipoArea { get; private set; } // Ejemplo: "Experiencia Docente", "Educacion", "Experiencia No Universitaria", "Investigacion", "Extensión"
-    
-        //public Guid AreaId { get; private set; }
+        
 
         private Documento() { }
 
@@ -25,8 +23,6 @@ namespace Convocatorias.Domain.Entities
                 if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
                     throw new ArgumentException("La URL del documento no es válida.", nameof(url));
             Id = Guid.NewGuid();
-            //TipoArea = tipoArea;
-            //AreaId = areaId;
             TipoDocumento = tipo;
             Url = url;
         }
