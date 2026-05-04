@@ -7,11 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
+    <Compile Remove="DTOs\**" />
+    <EmbeddedResource Remove="DTOs\**" />
+    <None Remove="DTOs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Interfaces\Services\" />
-    <Folder Include="Interfaces\Repositories\" />
-    <Folder Include="UseCases\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Convocatorias.Domain\Convocatorias.Domain.csproj" />
   </ItemGroup>
 
 </Project>
