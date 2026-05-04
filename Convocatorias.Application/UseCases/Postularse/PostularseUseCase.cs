@@ -27,15 +27,15 @@ namespace Convocatorias.Application.UseCases.Postularse
             var convocatoria = await _convocatoriaRepository.GetByIdAsync(request.ConvocatoriaId);
             if (convocatoria == null)
                 throw new ArgumentException("Convocatoria no encontrada");
+            
             //Verificar que la convocatoria esté disponible para postulación
             if (!await _convocatoriaRepository.EstaDisponibleAsync(request.ConvocatoriaId))
                 throw new InvalidOperationException("La convocatoria no está disponible para postulación");
 
 
-            //Verificar el periodo de postulación
-            var periodoActualId = convocatoria.ObtenerPeriodoActualId();
-            if (periodoActualId == Guid.Empty)
-                throw new InvalidOperationException("No hay un periodo de postulación activo para esta convocatoria");
+            //Verificar si es el periodo de postulación vigente
+            
+
             //Crear la postulación
             var postulacion = new Postulacion(request.ConvocatoriaId, request.CandidatoId);
 
