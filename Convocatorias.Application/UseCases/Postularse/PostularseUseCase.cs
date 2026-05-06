@@ -23,8 +23,10 @@ namespace Convocatorias.Application.UseCases.Postularse
 
             if(request.CandidatoId == Guid.Empty)
                 throw new ArgumentException("Candidato inválido");
+
             //Obtener convocatoria
             var convocatoria = await _convocatoriaRepository.GetByIdAsync(request.ConvocatoriaId);
+
             if (convocatoria == null)
                 throw new ArgumentException("Convocatoria no encontrada");
             
@@ -33,8 +35,13 @@ namespace Convocatorias.Application.UseCases.Postularse
                 throw new InvalidOperationException("La convocatoria no está disponible para postulación");
 
 
-            //Verificar si es el periodo de postulación vigente
-            
+            //Verificar si es el periodo de la convocatoria es el vigente
+            var periodo = await _convocatoriaRepository.GetPeriodoAsync(request.ConvocatoriaId);
+            if (periodo == null)
+                throw new InvalidOperationException("El periodo de la convocatoria es inválido");
+            if (!periodo.EstaVigente(DateTime.Now))
+                throw new InvalidOperationException("El periodo de la convocatoria no es vigente");
+
 
             //Crear la postulación
             var postulacion = new Postulacion(request.ConvocatoriaId, request.CandidatoId);
