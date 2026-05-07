@@ -16,7 +16,7 @@ namespace Convocatorias.Application.UseCases.Postularse
             _convocatoriaRepository = convocatoriaRepository;
         }
 
-        public async Task<PostularseResponse> Execute(PostularseRequest request)
+        public async Task<PostularseResponse> Postular(PostularseRequest request)
         {
             if(request.ConvocatoriaId == Guid.Empty)
                 throw new ArgumentException("Convocatoria inválida");
@@ -41,6 +41,7 @@ namespace Convocatorias.Application.UseCases.Postularse
                 throw new InvalidOperationException("El periodo de la convocatoria es inválido");
             if (!periodo.EstaVigente(DateTime.Now))
                 throw new InvalidOperationException("El periodo de la convocatoria no es vigente");
+
 
 
             //Crear la postulación

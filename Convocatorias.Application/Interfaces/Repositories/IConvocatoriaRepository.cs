@@ -7,5 +7,6 @@ namespace Convocatorias.Application.Interfaces.Repositories
         Task<Convocatoria> GetByIdAsync(Guid id);
         Task<bool> EstaDisponibleAsync(Guid id);
         Task<Periodo> GetPeriodoAsync(Guid convocatoriaId);
+        Task SaveChangesAsync();
     }
 }
