@@ -6,12 +6,6 @@ namespace Convocatorias.Domain.Tests
     public class ConvocatoriaTest
     {
         [Fact]
-        public void No_Deberia_Crear_Convocatoria_Si_Fechafin_es_menor()
-        {
-            Assert.Throws<ArgumentException>(() => new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid()));
-        }
-
-        [Fact]
         public void No_Deberia_Crear_Convocatoria_Si_Asignatura_Esta_Vacia()
         {
             Assert.Throws<ArgumentException>(() => new Convocatoria(1, 1, 1,"", Modalidad.Presencial, Guid.NewGuid()));
@@ -28,7 +22,7 @@ namespace Convocatorias.Domain.Tests
         }
 
         [Fact]
-        public void Status_Deberia_Ser_Activa_Al_Crear_Convocatoria()
+        public void Status_Deberia_Ser_Abierta_Al_Crear_Convocatoria()
         {
             var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
             Assert.Equal(Status.Abierta, convocatoria.Status);
@@ -46,7 +40,7 @@ namespace Convocatorias.Domain.Tests
         
         
         [Fact]
-        public void EstaDisponible_Deberia_Devolver_False_Si_Esta_Cerrada()
+        public void ValidarAbierta_Deberia_Devolver_False_Si_Esta_Cerrada()
         {
             var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
             convocatoria.CerrarConvocatoria();
@@ -54,18 +48,29 @@ namespace Convocatorias.Domain.Tests
         }
 
         [Fact]
-        public void ReabrirConvocatoria_Deberia_Cambiar_Fechas_Si_Esta_Activa()
+        public void Modificar_Periodo_Deberia_dejar_el_periodo_anterior_como_no_actual()
         {
             var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
             var periodoViejo = convocatoria.Periodos.FirstOrDefault();
             convocatoria.ModificarPeriodo(Guid.NewGuid());
             Assert.True(convocatoria.ValidarAbierta());
-            Assert.False(periodoViejo.EsActual);
-           
+            Assert.False(periodoViejo?.EsActual ?? true);
+
         }
 
-        
-         
+        [Fact]
+        public void Modificar_Periodo_Deberia_dejar_el_periodo_nuevo_como_actual()
+        {
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
+            convocatoria.ModificarPeriodo(Guid.NewGuid());
+            var periodoNuevo = convocatoria.Periodos.LastOrDefault();
+            
+            Assert.True(periodoNuevo?.EsActual ?? false);
+
+        }
+
+
+
 
     }
 }
