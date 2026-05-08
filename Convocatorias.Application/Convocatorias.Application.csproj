@@ -22,4 +22,9 @@
     <ProjectReference Include="..\Convocatorias.Domain\Convocatorias.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\CrearPeriodo\" />
+    <Folder Include="UseCases\AsignarPeriodoAConvocatoria\" />
+  </ItemGroup>
+
 </Project>
