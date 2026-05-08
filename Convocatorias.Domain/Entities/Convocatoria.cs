@@ -84,9 +84,11 @@ namespace Convocatorias.Domain.Entities
 
         public bool ValidarAbierta()
         {
-            if (Status != Status.Abierta)
-                throw new Exception("La convocatoria está cerrada");
-            return true;
+            bool convocatoriaStatus = false;
+            if (Status == Status.Abierta)
+                convocatoriaStatus = true;
+            
+            return convocatoriaStatus;
         }
     }
 }
