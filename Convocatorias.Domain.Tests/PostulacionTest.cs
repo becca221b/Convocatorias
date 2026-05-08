@@ -13,6 +13,14 @@ namespace Convocatorias.Domain.Tests
             Assert.Equal(EstadoPostulacion.Pendiente, postulacion.Estado);
         }
 
+        [Fact]
+        public void Deberia_cambiar_el_estado_de_la_Postulacion()
+        {
+            var postulacion = new Postulacion(Guid.NewGuid(), Guid.NewGuid());
+            postulacion.CambiarEstado(EstadoPostulacion.Rechazada);
+            Assert.Equal(EstadoPostulacion.Rechazada, postulacion.Estado);
+        }
+
         
 
         //Test para caso de uso: no crear postulacion para una convocatoria que no está disponible
