@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="UseCases\AsignarPeriodoAConvocatoria\" />
-    <Folder Include="UseCases\AprobarPostulaciones\" />
   </ItemGroup>
 
 </Project>
