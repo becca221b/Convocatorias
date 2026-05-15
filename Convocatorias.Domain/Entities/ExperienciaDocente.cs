@@ -6,7 +6,7 @@ namespace Convocatorias.Domain.Entities
     public sealed class ExperienciaDocente
     {
         public Guid Id { get; private set; }
-        public int aniosExperiencia { get; private set; }
+        public int AniosExperiencia { get; private set; }
         public Nivel Nivel { get; private set; }
         public string Institucion { get; private set; }
         public string Cargo { get; private set; }

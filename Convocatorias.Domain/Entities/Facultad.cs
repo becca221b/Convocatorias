@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Convocatorias.Domain.Entities
 {
-    internal class Facultad
+    public sealed class Facultad
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+        public int Id { get; private set; }
+        public string Nombre { get; private set; }
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Convocatorias.Domain.Entities
 {
-    internal class Sede
+    public sealed class Sede
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+        public int Id { get; private set; }
+        public string Nombre { get; private set; }
     }
 }

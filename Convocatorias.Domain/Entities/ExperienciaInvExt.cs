@@ -27,7 +27,7 @@ namespace Convocatorias.Domain.Entities
             Id = Guid.NewGuid();
             Tipo = tipo;
             TieneExperiencia = tieneExperiencia;
-            if(!tieneExperiencia)
+            if(tieneExperiencia == false)
             {
                 participoComo = ParticipacionInvExt.Ninguno;
                 descripcion = string.Empty;

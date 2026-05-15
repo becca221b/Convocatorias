@@ -33,5 +33,6 @@ namespace Convocatorias.Domain.Entities
         {
             EsActual = false;
         }
+
     }
 }

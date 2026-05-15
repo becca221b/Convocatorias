@@ -10,12 +10,15 @@
     <Compile Remove="DTOs\**" />
     <Compile Remove="Interfaces\Services\**" />
     <Compile Remove="Services\**" />
+    <Compile Remove="UseCases\CrearPeriodo\**" />
     <EmbeddedResource Remove="DTOs\**" />
     <EmbeddedResource Remove="Interfaces\Services\**" />
     <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="UseCases\CrearPeriodo\**" />
     <None Remove="DTOs\**" />
     <None Remove="Interfaces\Services\**" />
     <None Remove="Services\**" />
+    <None Remove="UseCases\CrearPeriodo\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\CrearPeriodo\" />
     <Folder Include="UseCases\AsignarPeriodoAConvocatoria\" />
+    <Folder Include="UseCases\AprobarPostulaciones\" />
   </ItemGroup>
 
 </Project>

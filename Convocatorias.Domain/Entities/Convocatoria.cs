@@ -74,11 +74,10 @@ namespace Convocatorias.Domain.Entities
             _periodos.Add(ConvocatoriaPeriodo.Crear(Id, nuevoPeriodoId));
         }
 
-        public Guid ObtenerPeriodo(Guid periodoId)
+        public Guid ObtenerPeriodoActual()
         {
             
-            return _periodos.FirstOrDefault(p => p.PeriodoId == periodoId)?.PeriodoId ?? Guid.Empty;
-
+            return _periodos.FirstOrDefault(p => p.EsActual)?.PeriodoId ?? Guid.Empty;
 
         }
 
