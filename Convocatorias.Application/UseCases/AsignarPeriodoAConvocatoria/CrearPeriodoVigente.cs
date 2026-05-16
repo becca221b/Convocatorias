@@ -34,21 +34,19 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                 var periodo = await _periodoRepository.GetByIdAsync(request.PeriodoId);
                 if (periodo == null)
                     throw new ArgumentException("Periodo no encontrado");
-    
-                //Verificar que el periodo no esté asignado a otra convocatoria
-                var periodoAsignado = await _convPeriodoRepository.ObtenerConvocatoriaPorPeriodoAsync(request.PeriodoId);
-                if (periodoAsignado != null)
-                    throw new InvalidOperationException("El periodo ya está asignado a otra convocatoria");
 
-            //Crear convocatoria periodo
+                await _convPeriodoRepository.DarDeBajaOtrosPeriodos();
+
+
+                //Crear convocatoria periodo
                 var convPeriodo = new ConvocatoriaPeriodo();
                 convPeriodo = ConvocatoriaPeriodo.Crear(request.ConvocatoriaId, request.PeriodoId);
 
 
-            await _convPeriodoRepository.AddAsync(convPeriodo);
+                await _convPeriodoRepository.AddAsync(convPeriodo);
                 await _unitOfWork.SaveChangesAsync();
     
-                return new CrearPeriodoVigenteResponse { ConvocatoriaPeriodoId = convPeriodo.Id };
+                
         }
 
     }
