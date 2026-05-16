@@ -11,6 +11,7 @@ namespace Convocatorias.Application.UseCases.Postularse
         private readonly IPostulacionRepository _postulacionRepository;
         private readonly IConvocatoriaRepository _convocatoriaRepository;
         private readonly IConvPeriodoRepository _convocatoriaPeriodoRepository;
+        private readonly ICandidatoRepository _candidatoRepository
         private readonly IUnitOfWork _unitOfWork;
 
         public PostularseUseCase(IPostulacionRepository postulacionRepository, IConvocatoriaRepository convocatoriaRepository, IConvPeriodoRepository convocatoriaPeriodoRepository, IUnitOfWork unitOfWork)
@@ -18,6 +19,7 @@ namespace Convocatorias.Application.UseCases.Postularse
             _postulacionRepository = postulacionRepository;
             _convocatoriaRepository = convocatoriaRepository;
             _convocatoriaPeriodoRepository = convocatoriaPeriodoRepository;
+            _candidatoRepository = candidatoRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -45,10 +47,17 @@ namespace Convocatorias.Application.UseCases.Postularse
                 throw new InvalidOperationException("La convocatoria no está en periodo vigente");
             }
 
+         
             //Verificar que el candidato no se haya postulado previamente a esta convocatoria
             var postulacionExistente = await _postulacionRepository.PostulacionExistsAsync(request.ConvocatoriaId, request.CandidatoId);
             if (postulacionExistente != null)
                 throw new InvalidOperationException("El candidato ya se ha postulado a esta convocatoria");
+
+            //Verificar que el candidato cuente con la documentación requerida para postularse a esta convocatoria
+            var candidato = await _candidatoRepository.GetByIdAsync(request.CandidatoId);
+            var cumpleRequisitos = candidato.TieneDocumentacionRequerida();
+            if (!cumpleRequisitos)  
+                throw new InvalidOperationException("El candidato no cumple con los requisitos para postularse a esta convocatoria");
 
             //Crear la postulación
             var postulacion = new Postulacion(request.ConvocatoriaId, request.CandidatoId);
