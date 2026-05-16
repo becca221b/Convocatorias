@@ -7,5 +7,8 @@ namespace Convocatorias.Application.Interfaces.Repositories
     {
         Task<bool> PostulacionExistsAsync(Guid convocatoriaId, Guid candidatoId);
         Task AddAsync(Postulacion postulacion);
+
+        Task<Postulacion> GetByIdAsync(Guid postulacionId);
+        Task UpdateAsync(Postulacion postulacion);
     }
 }
