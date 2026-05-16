@@ -9,9 +9,9 @@ namespace Convocatorias.Domain.Entities
 
         public bool EsActual { get; private set; }
         public DateTime AsignadoEn { get; private set; }
-        private ConvocatoriaPeriodo() { }
+        public ConvocatoriaPeriodo() { }
         
-        internal static ConvocatoriaPeriodo Crear(Guid convocatoriaId, Guid periodoId)
+        public static ConvocatoriaPeriodo Crear(Guid convocatoriaId, Guid periodoId)
         {
             return new ConvocatoriaPeriodo
             {

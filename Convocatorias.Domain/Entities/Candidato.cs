@@ -52,5 +52,12 @@
         {
             _experienciasInvExt.Add(experiencia);
         }
+
+        public bool TieneDocumentacionRequerida()
+            {
+                // Aquí puedes implementar la lógica para verificar si el candidato cumple con los requisitos de documentación.
+                // Por ejemplo, podrías verificar si tiene al menos una educación registrada, o si tiene experiencia docente.
+                return _educaciones.Any() && _experienciasDocente.Any();
+        }
     }
 }
