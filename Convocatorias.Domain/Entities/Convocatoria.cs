@@ -34,7 +34,7 @@ namespace Convocatorias.Domain.Entities
                 throw new ArgumentException("El período inicial debe ser válido");
             }
 
-            Id = Guid.NewGuid();
+           
             SedeId = sedeId;
             FacultadId = facultadId;
             CarreraId = carreraId;
@@ -42,7 +42,7 @@ namespace Convocatorias.Domain.Entities
             Modalidad = modalidad;
             Status = Status.Abierta;
 
-            _periodos.Add(ConvocatoriaPeriodo.Crear(Id, periodoInicialId));
+            
         }
 
         public void CerrarConvocatoria()
@@ -54,25 +54,7 @@ namespace Convocatorias.Domain.Entities
             Status = Status.Cerrada;
         }
 
-
-        public void ModificarPeriodo(Guid nuevoPeriodoId)
-        {
-            if (Status == Status.Cerrada)
-            {
-                throw new InvalidOperationException("No se puede modificar el período de una convocatoria cerrada");
-            }
-            if (nuevoPeriodoId == Guid.Empty)
-            {
-                throw new ArgumentException("El período debe ser válido");
-            }
-
-            foreach (var periodo in _periodos)
-            {
-                periodo.MarcarComoNoActual();
-            }
-
-            _periodos.Add(ConvocatoriaPeriodo.Crear(Id, nuevoPeriodoId));
-        }
+        
 
         public Guid ObtenerPeriodoActual()
         {
@@ -88,6 +70,16 @@ namespace Convocatorias.Domain.Entities
                 convocatoriaStatus = true;
             
             return convocatoriaStatus;
+        }
+
+        public void AgregarPeriodo(ConvocatoriaPeriodo periodoConvocatoria)
+        {
+            if (periodoConvocatoria == null)
+            {
+                throw new ArgumentNullException(nameof(periodoConvocatoria), "El período de convocatoria no puede ser nulo");
+            }
+
+            _periodos.Add(periodoConvocatoria);
         }
     }
 }

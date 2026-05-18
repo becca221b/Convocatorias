@@ -9,6 +9,6 @@ namespace Convocatorias.Application.Interfaces.Repositories
          Task<IEnumerable<ConvocatoriaPeriodo>> GetByConvocatoriaIdAsync(Guid convocatoriaId);
          Task UpdateAsync(ConvocatoriaPeriodo convocatoriaPeriodo);
          Task<Guid> ObtenerPeriodoVigente();
-         Task DesactivarOtrosPeriodos();
+         Task DesactivarOtrosPeriodos(Guid convocatoriaId);
     }
 }

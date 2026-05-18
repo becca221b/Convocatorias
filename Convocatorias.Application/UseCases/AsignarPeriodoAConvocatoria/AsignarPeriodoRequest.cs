@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
 {
-    public class CrearPeriodoVigenteResponse
+    public class AsignarPeriodoRequest
     {
         public Guid ConvocatoriaId { get; set; }
         public Guid PeriodoId { get; set; }
-        public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
-
-        public String PeriodoNombre { get; set; }
     }
 }
