@@ -8,6 +8,6 @@ namespace Convocatorias.Application.Interfaces
 {
     public interface IUnitOfWork
     {
-        Task SaveChanges (CancellationToken cancellationToken = default);
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
