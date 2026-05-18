@@ -22,21 +22,30 @@ namespace Convocatorias.Application.UseCases.AprobarPostulaciones
             var postulacion = await _postulacionRepository.GetByIdAsync(request.PostulacionId);
             if (postulacion == null)
                 throw new ArgumentException("Postulación no encontrada");
+
             //Obtener convocatoria
             var convocatoria = await _convocatoriaRepository.GetByIdAsync(postulacion.ConvocatoriaId);
             if (convocatoria == null)
                 throw new ArgumentException("Convocatoria no encontrada");
+
+            // Ver si la convocatoria está abierta
+            if (!convocatoria.ValidarAbierta())
+                throw new InvalidOperationException("La convocatoria ya está cerrada, tiene una postulación ya aprobada");
+
             //Aprobar la postulación
             postulacion.CambiarEstado(EstadoPostulacion.Aprobada);
             convocatoria.CerrarConvocatoria();
             //Actualizar la postulación
             await _postulacionRepository.UpdateAsync(postulacion);
-            await _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
             //Respuesta
             return new AprobarPostulacionResponse
             {
                 PostulacionId = postulacion.Id,
-                Estado = postulacion.Estado.ToString()
+                CandidatoName = "", // Aquí podríamos obtener el nombre del candidato a través de una consulta adicional
+                Estado = postulacion.Estado.ToString(),
+                ConvocatoriaName = convocatoria.Asignatura,
             };
         }
+    }
 }
