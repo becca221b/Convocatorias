@@ -1,10 +1,7 @@
-﻿using Convocatorias.Application.Interfaces.Repositories;
+﻿using Convocatorias.Application.Interfaces;
+using Convocatorias.Application.Interfaces.Repositories;
 using Convocatorias.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
 {
@@ -35,7 +32,7 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                 if (periodo == null)
                     throw new ArgumentException("Periodo no encontrado");
 
-                await _convPeriodoRepository.DarDeBajaOtrosPeriodos();
+                await _convPeriodoRepository.DesactivarOtrosPeriodos();
 
 
                 //Crear convocatoria periodo
@@ -45,8 +42,17 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
 
                 await _convPeriodoRepository.AddAsync(convPeriodo);
                 await _unitOfWork.SaveChangesAsync();
-    
-                
+
+                return new CrearPeriodoVigenteResponse
+                {
+                    ConvocatoriaId = convPeriodo.ConvocatoriaId,
+                    PeriodoId = convPeriodo.PeriodoId,
+                    FechaInicio = periodo.FechaInicio,
+                    FechaFin = periodo.FechaFin,
+                    PeriodoNombre = periodo.Orden + " Convocatoria " + periodo.Cuatrimestre + " Cuatrimestre " +  periodo.Anio
+                };
+
+
         }
 
     }
