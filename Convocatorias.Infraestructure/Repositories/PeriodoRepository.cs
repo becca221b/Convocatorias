@@ -12,19 +12,23 @@ namespace Convocatorias.Infraestructure.Repositories
             this.dbContext = dbContext;
         }
 
-        public Task AddAsync(Periodo periodo)
+        public async Task AddAsync(Periodo periodo)
         {
-            
+            await dbContext.Periodos.AddAsync(periodo);
         }
 
-        public Task<IEnumerable<Periodo>> GetAllAsync()
+        public async Task<IReadOnlyList<Periodo>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await dbContext.Periodos
+                .AsNoTracking()
+                .OrderByDescending(p => p.Anio)
+                .ThenByDescending(p => p.Cuatrimestre)
+                .ToListAsync();
         }
 
         public async Task<Periodo> GetByIdAsync(Guid id)
         {
-            return await Task.FromResult(dbContext.Periodos.FirstOrDefault(p => p.Id == id));
+            return await dbContext.Periodos.FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
