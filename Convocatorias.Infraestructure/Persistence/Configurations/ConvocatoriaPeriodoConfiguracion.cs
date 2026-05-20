@@ -12,14 +12,18 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
         {
             builder.ToTable("ConvocatoriaPeriodos");
 
-            builder.HasKey(cp => new
-            {
-                cp.ConvocatoriaId,
-                cp.PeriodoId
-            });
+            builder.HasKey(cp => cp.Id);
 
-            builder.Property(cp => cp.EsActual)
-                .IsRequired();
+            builder.HasIndex(x => new
+            {
+                x.ConvocatoriaId,
+                x.PeriodoId
+            })
+            .IsUnique()
+            .HasFilter("[EsActual] = 1") // Solo puede haber un período actual por convocatoria
+            .IsUnique();
+
+
             builder.Property(cp => cp.AsignadoEn)
                 .IsRequired();
 
@@ -27,19 +31,11 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
                 .WithMany(c => c.Periodos)
                 .HasForeignKey(cp => cp.ConvocatoriaId);
 
-
-
             builder.HasOne(cp => cp.Periodo)
                 .WithMany(p => p.Convocatorias)
                 .HasForeignKey(cp => cp.PeriodoId);
 
 
-            builder.HasIndex(x => new
-            {
-                x.ConvocatoriaId,
-                x.PeriodoId
-            })
-            .IsUnique();
         }
 
         

@@ -29,6 +29,10 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
                 .WithOne(cp => cp.Convocatoria)
                 .HasForeignKey(cp => cp.ConvocatoriaId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Navigation(c => c.Periodos)
+                   .HasField("_periodos")
+                   .UsePropertyAccessMode(PropertyAccessMode.Field);   
         }
 
         
