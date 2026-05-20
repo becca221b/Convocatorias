@@ -1,4 +1,6 @@
 ﻿
+using Convocatorias.Application.Interfaces;
+
 namespace Convocatorias.Infraestructure.Persistence
 {
     public sealed class UnitOfWork : IUnitOfWork
@@ -8,7 +10,7 @@ namespace Convocatorias.Infraestructure.Persistence
         {
             _context = context;
         }
-        public async Task SaveChanges(CancellationToken cancellationToken = default)
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
