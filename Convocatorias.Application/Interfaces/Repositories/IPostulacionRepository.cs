@@ -5,10 +5,12 @@ namespace Convocatorias.Application.Interfaces.Repositories
 {
     public interface IPostulacionRepository
     {
-        Task<bool> PostulacionExistsAsync(Guid convocatoriaId, Guid candidatoId);
-        Task AddAsync(Postulacion postulacion);
+        Task<Postulacion?> GetByIdAsync(Guid postulacionId, CancellationToken ct = default);
+        Task<bool> PostulacionExistsAsync(Guid convocatoriaId, Guid candidatoId, CancellationToken ct = default);
+        Task AddAsync(Postulacion postulacion, CancellationToken ct = default);
 
-        Task<Postulacion> GetByIdAsync(Guid postulacionId);
-        Task UpdateAsync(Postulacion postulacion);
+        Task UpdateAsync(Postulacion postulacion, CancellationToken ct = default);
+        Task DeleteAsync(Guid postulacionId, CancellationToken ct = default);
+
     }
 }

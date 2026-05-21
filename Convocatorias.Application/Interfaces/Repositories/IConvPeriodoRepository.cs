@@ -7,8 +7,8 @@ namespace Convocatorias.Application.Interfaces.Repositories
     {
         Task AddAsync(ConvocatoriaPeriodo convocatoriaPeriodo);
          Task<IEnumerable<ConvocatoriaPeriodo>> GetByConvocatoriaIdAsync(Guid convocatoriaId);
-         Task UpdateAsync(ConvocatoriaPeriodo convocatoriaPeriodo);
-         Task<Guid> ObtenerPeriodoVigente();
+        
+         
          Task DesactivarOtrosPeriodos(Guid convocatoriaId);
     }
 }
