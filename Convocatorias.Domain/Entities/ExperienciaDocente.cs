@@ -31,7 +31,7 @@ namespace Convocatorias.Domain.Entities
                 throw new ArgumentException("La fecha de inicio del periodo no puede ser posterior a la fecha de fin del periodo.", nameof(desdePeriodo));
 
             Id = Guid.NewGuid();
-            this.aniosExperiencia = aniosExperiencia;
+            AniosExperiencia = aniosExperiencia;
             Nivel = nivel;
             Institucion = institucion;
             Cargo = cargo;

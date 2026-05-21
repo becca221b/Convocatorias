@@ -11,10 +11,10 @@ namespace Convocatorias.Application.UseCases.Postularse
         private readonly IPostulacionRepository _postulacionRepository;
         private readonly IConvocatoriaRepository _convocatoriaRepository;
         private readonly IConvPeriodoRepository _convocatoriaPeriodoRepository;
-        private readonly ICandidatoRepository _candidatoRepository
+        private readonly ICandidatoRepository _candidatoRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PostularseUseCase(IPostulacionRepository postulacionRepository, IConvocatoriaRepository convocatoriaRepository, IConvPeriodoRepository convocatoriaPeriodoRepository, IUnitOfWork unitOfWork)
+        public PostularseUseCase(IPostulacionRepository postulacionRepository, IConvocatoriaRepository convocatoriaRepository, IConvPeriodoRepository convocatoriaPeriodoRepository, ICandidatoRepository candidatoRepository, IUnitOfWork unitOfWork)
         {
             _postulacionRepository = postulacionRepository;
             _convocatoriaRepository = convocatoriaRepository;
@@ -34,23 +34,19 @@ namespace Convocatorias.Application.UseCases.Postularse
                 throw new ArgumentException("Convocatoria no encontrada");
             
             //Verificar que la convocatoria esté abierta
-            if (!convocatoria.ValidarAbierta())
+            if (!convocatoria.estaAbierta())
                 throw new InvalidOperationException("La convocatoria está cerrada");
 
 
             //Verificar si es el periodo de la convocatoria es el vigente
-            var periodoId = convocatoria.ObtenerPeriodoActual();
-            var convocatoriaPeriodoActualId = await _convocatoriaPeriodoRepository.ObtenerPeriodoVigente();
+            var convocatoriaPeriodo = await _convocatoriaPeriodoRepository.GetByConvocatoriaIdAsync(request.ConvocatoriaId);
+            if (convocatoriaPeriodo == null || !convocatoriaPeriodo.Any(p => p.Equals(p.EsActual))) 
+                throw new InvalidOperationException("El periodo de la convocatoria no es vigente");
 
-            if (periodoId != convocatoriaPeriodoActualId)
-            {
-                throw new InvalidOperationException("La convocatoria no está en periodo vigente");
-            }
 
-         
             //Verificar que el candidato no se haya postulado previamente a esta convocatoria
             var postulacionExistente = await _postulacionRepository.PostulacionExistsAsync(request.ConvocatoriaId, request.CandidatoId);
-            if (postulacionExistente != null)
+            if (postulacionExistente)
                 throw new InvalidOperationException("El candidato ya se ha postulado a esta convocatoria");
 
             //Verificar que el candidato cuente con la documentación requerida para postularse a esta convocatoria
@@ -64,7 +60,7 @@ namespace Convocatorias.Application.UseCases.Postularse
 
             //Guardar la postulación
             await _postulacionRepository.AddAsync(postulacion);
-            await _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
             //Respuesta
             return new PostularseResponse
             {

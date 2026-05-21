@@ -28,7 +28,7 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                 if (convocatoria == null)
                     throw new ArgumentException("Convocatoria no encontrada");
 
-                if(convocatoria.Status == Status.Cerrada)
+                if(!convocatoria.estaAbierta())
                     throw new ArgumentException("La convocatoria esta cerrada, no se pueden asignar periodos");
 
                 //si los periodos de la convocatoria no estan vacios, validar que el ultimo periodo cargado no este vigente
@@ -53,17 +53,18 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                 if (periodo.EstaVigente(DateTime.UtcNow)==false)
                     throw new ArgumentException("El periodo seleccionado no esta vigente");
 
-                await _convPeriodoRepository.DesactivarOtrosPeriodos(request.ConvocatoriaId);//Desactivar otros periodos vigentes para la convocatoria solo puede haber uno activo por materia
+                //Desactivar otros periodos vigentes para la convocatoria solo puede haber uno activo por materia
+                //await _convPeriodoRepository.DesactivarOtrosPeriodos(request.ConvocatoriaId);
+                
 
 
 
-                //Ver que la convocatoria no tenga el mismo periodo asignado
-                if (convocatoria.Periodos.Any(p => p.PeriodoId == request.PeriodoId))
+            //Ver que la convocatoria no tenga el mismo periodo asignado
+            if (convocatoria.Periodos.Any(p => p.PeriodoId == request.PeriodoId))
                     throw new ArgumentException("La convocatoria ya tiene asignado el periodo seleccionado");
 
                 //Crear convocatoria periodo
-                var convPeriodo = new ConvocatoriaPeriodo();
-                convPeriodo = ConvocatoriaPeriodo.Crear(request.ConvocatoriaId, request.PeriodoId);
+                var convPeriodo = ConvocatoriaPeriodo.Crear(request.ConvocatoriaId, request.PeriodoId);
                 convocatoria.Periodos.ToList().ForEach(p => p.MarcarComoNoActual());
                 convocatoria.AgregarPeriodo(convPeriodo);
                 await _convPeriodoRepository.AddAsync(convPeriodo);

@@ -63,13 +63,9 @@ namespace Convocatorias.Domain.Entities
 
         }
 
-        public bool ValidarAbierta()
+        public bool estaAbierta()
         {
-            bool convocatoriaStatus = false;
-            if (Status == Status.Abierta)
-                convocatoriaStatus = true;
-            
-            return convocatoriaStatus;
+            return Status == Status.Abierta;
         }
 
         public void AgregarPeriodo(ConvocatoriaPeriodo periodoConvocatoria)
