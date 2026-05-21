@@ -29,14 +29,14 @@ namespace Convocatorias.Application.UseCases.AprobarPostulaciones
                 throw new ArgumentException("Convocatoria no encontrada");
 
             // Ver si la convocatoria está abierta
-            if (!convocatoria.ValidarAbierta())
+            if (!convocatoria.estaAbierta())
                 throw new InvalidOperationException("La convocatoria ya está cerrada, tiene una postulación ya aprobada");
 
             //Aprobar la postulación
             postulacion.CambiarEstado(EstadoPostulacion.Aprobada);
             convocatoria.CerrarConvocatoria();
             //Actualizar la postulación
-            await _postulacionRepository.UpdateAsync(postulacion);
+            await _postulacionRepository.AddAsync(postulacion);
             await _unitOfWork.SaveChangesAsync();
             //Respuesta
             return new AprobarPostulacionResponse
