@@ -1,34 +1,56 @@
 ﻿using Convocatorias.Application.Interfaces.Repositories;
 using Convocatorias.Domain.Entities;
+using Convocatorias.Infraestructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Convocatorias.Infraestructure.Repositories
 {
-    internal sealed class PeriodoRepository : IPeriodoRepository
+    internal sealed class PeriodoRepository(ConvocatoriasDbContext context) : BaseRepository<Periodo>(context) , IPeriodoRepository
     {
-        private readonly ConvocatoriasDbContext dbContext;
 
-        public PeriodoRepository(ConvocatoriasDbContext dbContext)
+        public Task AddAsync(Periodo periodo, CancellationToken ct = default)
         {
-            this.dbContext = dbContext;
+            return DbSet.AddAsync(periodo, ct).AsTask();
         }
 
-        public async Task AddAsync(Periodo periodo)
+        public async Task<IReadOnlyList<Periodo>> GetAllAsync(CancellationToken ct = default)
         {
-            await dbContext.Periodos.AddAsync(periodo);
+            return await DbSet
+                 .AsNoTracking()
+                 .OrderByDescending(p => p.Anio)
+                 .ThenByDescending(p => p.Cuatrimestre)
+                 .ToListAsync(ct);
         }
 
-        public async Task<IReadOnlyList<Periodo>> GetAllAsync()
+     
+        public async Task<Periodo?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
-            return await dbContext.Periodos
+            return await DbSet
                 .AsNoTracking()
-                .OrderByDescending(p => p.Anio)
-                .ThenByDescending(p => p.Cuatrimestre)
-                .ToListAsync();
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<Periodo> GetByIdAsync(Guid id)
+        public async Task<Periodo?> GetVigenteAsync(DateTime fecha, CancellationToken ct = default)
         {
-            return await dbContext.Periodos.FirstOrDefaultAsync(p => p.Id == id);
+            return await DbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.FechaInicio <= fecha && p.FechaFin >= fecha, ct);
         }
+
+        public Task<Guid> GetVigenteIdAsync(CancellationToken ct = default)
+        {
+            return DbSet
+                .AsNoTracking()
+                .Where(p => p.FechaInicio <= DateTime.UtcNow && p.FechaFin >= DateTime.UtcNow)
+                .Select(p => p.Id)
+                .FirstOrDefaultAsync(ct);
+        }
+
     }
 }
+
+                
+
+        
+    
