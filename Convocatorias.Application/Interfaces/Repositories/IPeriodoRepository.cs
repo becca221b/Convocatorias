@@ -8,6 +8,6 @@ namespace Convocatorias.Application.Interfaces.Repositories
         Task<Periodo?> GetByIdAsync(Guid id, CancellationToken ct = default);
         Task<IReadOnlyList<Periodo>> GetAllAsync(CancellationToken ct = default);
         Task AddAsync(Periodo periodo, CancellationToken ct = default);
-        Task<Guid> GetVigenteAsync(CancellationToken ct = default);
+        Task<Guid> GetVigenteIdAsync(CancellationToken ct = default);
     }
 }
