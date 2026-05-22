@@ -53,15 +53,13 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                 if (periodo.EstaVigente(DateTime.UtcNow)==false)
                     throw new ArgumentException("El periodo seleccionado no esta vigente");
 
+
+                //Ver que la convocatoria no tenga el mismo periodo asignado
+                if (convocatoria.Periodos.Any(p => p.PeriodoId == request.PeriodoId))
+                        throw new ArgumentException("La convocatoria ya tiene asignado el periodo seleccionado");
+
                 //Desactivar otros periodos vigentes para la convocatoria solo puede haber uno activo por materia
-                //await _convPeriodoRepository.DesactivarOtrosPeriodos(request.ConvocatoriaId);
-                
-
-
-
-            //Ver que la convocatoria no tenga el mismo periodo asignado
-            if (convocatoria.Periodos.Any(p => p.PeriodoId == request.PeriodoId))
-                    throw new ArgumentException("La convocatoria ya tiene asignado el periodo seleccionado");
+                await _convPeriodoRepository.DesactivarOtrosPeriodos(request.ConvocatoriaId);
 
                 //Crear convocatoria periodo
                 var convPeriodo = ConvocatoriaPeriodo.Crear(request.ConvocatoriaId, request.PeriodoId);

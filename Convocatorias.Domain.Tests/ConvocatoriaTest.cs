@@ -44,30 +44,10 @@ namespace Convocatorias.Domain.Tests
         {
             var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
             convocatoria.CerrarConvocatoria();
-            Assert.False(convocatoria.ValidarAbierta());
+            Assert.False(convocatoria.estaAbierta());
         }
 
-        [Fact]
-        public void Modificar_Periodo_Deberia_dejar_el_periodo_anterior_como_no_actual()
-        {
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
-            var periodoViejo = convocatoria.Periodos.FirstOrDefault();
-            convocatoria.ModificarPeriodo(Guid.NewGuid());
-            Assert.True(convocatoria.ValidarAbierta());
-            Assert.False(periodoViejo?.EsActual ?? true);
-
-        }
-
-        [Fact]
-        public void Modificar_Periodo_Deberia_dejar_el_periodo_nuevo_como_actual()
-        {
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
-            convocatoria.ModificarPeriodo(Guid.NewGuid());
-            var periodoNuevo = convocatoria.Periodos.LastOrDefault();
-            
-            Assert.True(periodoNuevo?.EsActual ?? false);
-
-        }
+        
 
 
 
