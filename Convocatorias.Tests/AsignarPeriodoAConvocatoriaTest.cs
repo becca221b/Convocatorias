@@ -27,6 +27,14 @@ namespace Convocatorias.Tests
             // Arrange
             var convocatoriaId = Guid.NewGuid();
 
+            var periodoViejo = new Periodo(
+                orden: 1,
+                cuatrimestre: Cuatrimestre.Primer,
+                anio: DateTime.UtcNow.Year,
+                fechaInicio: DateTime.UtcNow.AddMonths(-2),
+                fechaFin: DateTime.UtcNow.AddMonths(-1)
+            );
+
             var periodo = new Periodo(
                 orden: 1,
                 cuatrimestre: Cuatrimestre.Primer,
@@ -36,7 +44,7 @@ namespace Convocatorias.Tests
             );
             var periodoId = periodo.Id;
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, periodoViejo);
             SetPrivateId(convocatoria, convocatoriaId);
 
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
@@ -114,7 +122,7 @@ namespace Convocatorias.Tests
                 fechaFin: DateTime.UtcNow.AddDays(1)
             );
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, periodo);
             SetPrivateId(convocatoria, convocatoriaId);
             convocatoria.CerrarConvocatoria();
 
@@ -142,7 +150,8 @@ namespace Convocatorias.Tests
             var convocatoriaId = Guid.NewGuid();
             var periodoId = Guid.NewGuid();
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var periodo = new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1));
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, periodo);
             SetPrivateId(convocatoria, convocatoriaId);
 
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
@@ -176,7 +185,7 @@ namespace Convocatorias.Tests
                 fechaFin: DateTime.UtcNow.AddDays(-5)
             );
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, periodo);
             SetPrivateId(convocatoria, convocatoriaId);
 
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
@@ -197,41 +206,7 @@ namespace Convocatorias.Tests
             await Assert.ThrowsAsync<ArgumentException>(() => useCase.Asignar(request));
         }
 
-        [Fact]
-        public async Task Asignar_Deberia_Lanzar_Si_Convocatoria_Tiene_Mismo_Periodo()
-        {
-            var convocatoriaId = Guid.NewGuid();
-            var periodo = new Periodo(
-                orden: 1,
-                cuatrimestre: Cuatrimestre.Primer,
-                anio: DateTime.UtcNow.Year,
-                fechaInicio: DateTime.UtcNow.AddDays(-1),
-                fechaFin: DateTime.UtcNow.AddDays(1)
-            );
-            var periodoId = periodo.Id;
-
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
-            SetPrivateId(convocatoria, convocatoriaId);
-            convocatoria.AgregarPeriodo(periodoId); // ya asignado
-
-            var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
-            convocatoriaRepo
-                .Setup(r => r.GetByIdAsync(convocatoriaId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(convocatoria);
-
-            var periodoRepo = new Mock<IPeriodoRepository>();
-            periodoRepo
-                .Setup(r => r.GetByIdAsync(periodoId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(periodo);
-
-            var uow = new Mock<IUnitOfWork>();
-
-            var useCase = new AsignarPeriodo(convocatoriaRepo.Object, periodoRepo.Object, uow.Object);
-            var request = new AsignarPeriodoRequest { ConvocatoriaId = convocatoriaId, PeriodoId = periodoId };
-
-            await Assert.ThrowsAsync<ArgumentException>(() => useCase.Asignar(request));
-        }
-
+       
         [Fact]
         public async Task Asignar_Deberia_Lanzar_Si_Hay_Periodo_Actual_Vigente_En_Convocatoria()
         {
@@ -251,10 +226,9 @@ namespace Convocatorias.Tests
                 fechaFin: DateTime.UtcNow.AddDays(1)
             );
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, actualPeriodo);
             SetPrivateId(convocatoria, convocatoriaId);
-            // Asignar periodo actual
-            convocatoria.AgregarPeriodo(actualPeriodo.Id);
+            
 
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
             convocatoriaRepo

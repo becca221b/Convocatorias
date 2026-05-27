@@ -38,7 +38,7 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                     if (ultimoPeriodo != null)
                     {
                         var periodoActual = await _periodoRepository.GetByIdAsync(ultimoPeriodo.PeriodoId);
-                        if (periodoActual.EstaVigente(DateTime.UtcNow))
+                        if (periodoActual != null && periodoActual.EstaVigente(DateTime.UtcNow))
                             throw new ArgumentException("El periodo actual de la convocatoria esta vigente, no se pueden asignar nuevos periodos");
                     }
                 }

@@ -23,7 +23,7 @@ namespace Convocatorias.Tests
             var postulacion = new Postulacion(convocatoriaId, candidatoId);
             postulacion.CambiarEstado(EstadoPostulacion.Revision); // preparar estado válido para aprobar
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1)));
 
             var postulacionRepo = new Mock<IPostulacionRepository>();
             postulacionRepo
@@ -106,7 +106,7 @@ namespace Convocatorias.Tests
             var postulacion = new Postulacion(convocatoriaId, Guid.NewGuid());
             postulacion.CambiarEstado(EstadoPostulacion.Revision);
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1)));
             convocatoria.CerrarConvocatoria();
 
             var postulacionRepo = new Mock<IPostulacionRepository>();
@@ -134,7 +134,7 @@ namespace Convocatorias.Tests
             var postulacion = new Postulacion(convocatoriaId, Guid.NewGuid());
             postulacion.CambiarEstado(EstadoPostulacion.Revision);
             postulacion.CambiarEstado(EstadoPostulacion.Aprobada);
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1)));
             var postulacionRepo = new Mock<IPostulacionRepository>();
             postulacionRepo
                 .Setup(r => r.GetByIdAsync(postulacion.Id, It.IsAny<CancellationToken>()))

@@ -18,7 +18,7 @@ namespace Convocatorias.Domain.Entities
 
         private Convocatoria() { }
 
-        public Convocatoria(int sedeId, int facultadId, int carreraId, string asignatura, Modalidad modalidad)
+        public Convocatoria(int sedeId, int facultadId, int carreraId, string asignatura, Modalidad modalidad, Periodo periodoInicial)
         {
             if (string.IsNullOrWhiteSpace(asignatura))
             {
@@ -38,8 +38,8 @@ namespace Convocatorias.Domain.Entities
             Asignatura = asignatura;
             Modalidad = modalidad;
             Status = Status.Abierta;
+            _periodos.Add(ConvocatoriaPeriodo.Crear(Id, periodoInicial.Id));
 
-            
         }
 
         public void CerrarConvocatoria()

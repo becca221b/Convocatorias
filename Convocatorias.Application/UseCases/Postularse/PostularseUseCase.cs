@@ -26,7 +26,6 @@ namespace Convocatorias.Application.UseCases.Postularse
 
         public async Task<PostularseResponse> Postular(PostularseRequest request)
         {
-                     
 
             //Obtener convocatoria
             var convocatoria = await _convocatoriaRepository.GetByIdAsync(request.ConvocatoriaId);

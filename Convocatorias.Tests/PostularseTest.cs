@@ -24,7 +24,10 @@ namespace Convocatorias.Tests
             candidato.AgregarExperienciaDocente(new ExperienciaDocente(5, Nivel.Universitario, "UBA", "Profesor", DateTime.UtcNow.AddYears(-5), DateTime.UtcNow));
             var candidatoId = candidato.Id;
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var periodo = new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1));
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, periodo);
+
+            
 
             var postulacionRepo = new Mock<IPostulacionRepository>();
             Postulacion? postulacionCapturada = null;
@@ -42,9 +45,10 @@ namespace Convocatorias.Tests
                 .ReturnsAsync(convocatoria);
 
             var periodoRepo = new Mock<IPeriodoRepository>();
+            
             periodoRepo
                 .Setup(r => r.GetVigenteAsync(It.IsAny<DateTime>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Periodo?)null);
+                .ReturnsAsync(periodo);
 
             var candidatoRepo = new Mock<ICandidatoRepository>();
             candidatoRepo
@@ -105,7 +109,8 @@ namespace Convocatorias.Tests
             var convocatoriaId = Guid.NewGuid();
             var candidatoId = Guid.NewGuid();
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
+            var periodo = new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1));
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, periodo);
             convocatoria.CerrarConvocatoria();
 
             var postulacionRepo = new Mock<IPostulacionRepository>();
@@ -142,7 +147,7 @@ namespace Convocatorias.Tests
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
             convocatoriaRepo
                 .Setup(r => r.GetByIdAsync(convocatoriaId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial));
+                .ReturnsAsync(new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1))));
 
             var periodoRepo = new Mock<IPeriodoRepository>();
             var candidatoRepo = new Mock<ICandidatoRepository>();
@@ -169,7 +174,7 @@ namespace Convocatorias.Tests
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
             convocatoriaRepo
                 .Setup(r => r.GetByIdAsync(convocatoriaId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial));
+                .ReturnsAsync(new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, new Periodo(1, Cuatrimestre.Primer, 2026, DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow.AddMonths(1))));
 
             var periodoRepo = new Mock<IPeriodoRepository>();
             var candidatoRepo = new Mock<ICandidatoRepository>();
