@@ -28,7 +28,7 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
 
             builder.HasMany(e => e.Documentos)
                 .WithOne()
-                .HasForeignKey(e => e.Id)
+                .HasForeignKey("EducacionId")
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Navigation(e => e.Documentos)

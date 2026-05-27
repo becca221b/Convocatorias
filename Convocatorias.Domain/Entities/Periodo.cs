@@ -12,10 +12,7 @@ namespace Convocatorias.Domain.Entities
         public DateTime FechaInicio { get; private set; }
         public DateTime FechaFin { get; private set; }
 
-        private readonly List<ConvocatoriaPeriodo> _convocatorias = [];
-
-        public IReadOnlyCollection<ConvocatoriaPeriodo> Convocatorias
-            => _convocatorias.AsReadOnly();
+        
 
         private Periodo() { }
         public Periodo(int orden, Cuatrimestre cuatrimestre, int anio, DateTime fechaInicio, DateTime fechaFin)

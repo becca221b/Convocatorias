@@ -10,7 +10,7 @@ namespace Convocatorias.Domain.Entities
         public DateTime FechaPostulacion { get; private set; }
         public EstadoPostulacion Estado { get; private set; }
 
-        public Postulacion() { }
+        private Postulacion() { }
 
         public Postulacion(Guid convocatoriaId, Guid candidatoId)
         {

@@ -11,14 +11,14 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
             builder.ToTable("Postulaciones");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.ConvocatoriaId)
-                .IsRequired()
-                .HasColumnType("uniqueidentifier");
+                .IsRequired();
+
             builder.Property(p => p.CandidatoId)
-                .IsRequired()
-                .HasColumnType("uniqueidentifier");
+                .IsRequired();
+
             builder.Property(p => p.FechaPostulacion)
-                .IsRequired()
-                .HasColumnType("datetime2");
+                .IsRequired();
+                
             builder.Property(p => p.Estado)
                 .IsRequired()
                 .HasConversion<string>()

@@ -16,7 +16,8 @@ namespace Convocatorias.Infraestructure.Persistence
 
         public DbSet<Postulacion> Postulaciones => Set<Postulacion>();
         
-        public DbSet<Candidato> Candidatos => Set<Candidato>(); 
+        public DbSet<Candidato> Candidatos => Set<Candidato>();
+        
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

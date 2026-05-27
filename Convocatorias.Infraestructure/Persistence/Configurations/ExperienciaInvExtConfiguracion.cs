@@ -22,7 +22,7 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
 
             builder.HasMany(e => e.Documentos)
                 .WithOne()
-                .HasForeignKey(d => d.Id)
+                .HasForeignKey("ExperienciaInvExtId")
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Navigation(e => e.Documentos)

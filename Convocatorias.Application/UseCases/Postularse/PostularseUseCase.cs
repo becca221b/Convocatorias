@@ -42,6 +42,8 @@ namespace Convocatorias.Application.UseCases.Postularse
             //Verificar si es el periodo de la convocatoria es el vigente
            var periodoVigente = await _periodoRepository.GetVigenteAsync(DateTime.UtcNow);
 
+            if(periodoVigente == null || periodoVigente.Id != convocatoria.ObtenerPeriodoActual())
+                throw new InvalidOperationException("No se pueden realizar postulaciones fuera del periodo vigente de la convocatoria");
 
 
             //Verificar que el candidato no se haya postulado previamente a esta convocatoria
