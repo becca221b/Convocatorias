@@ -54,9 +54,7 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                     throw new ArgumentException("El periodo seleccionado no esta vigente");
 
 
-                //Ver que la convocatoria no tenga el mismo periodo asignado
-                if (convocatoria.Periodos.Any(p => p.PeriodoId == request.PeriodoId))
-                        throw new ArgumentException("La convocatoria ya tiene asignado el periodo seleccionado");
+                
 
                 //Crear convocatoria periodo             
                 convocatoria.AgregarPeriodo(request.PeriodoId);
