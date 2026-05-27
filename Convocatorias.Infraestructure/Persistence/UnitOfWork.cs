@@ -3,7 +3,7 @@ using Convocatorias.Application.Interfaces;
 
 namespace Convocatorias.Infraestructure.Persistence
 {
-    public sealed class UnitOfWork : IUnitOfWork
+    internal sealed class UnitOfWork : IUnitOfWork
     {
         private readonly ConvocatoriasDbContext _context;
         public UnitOfWork(ConvocatoriasDbContext context)

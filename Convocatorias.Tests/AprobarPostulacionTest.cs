@@ -23,14 +23,14 @@ namespace Convocatorias.Tests
             var postulacion = new Postulacion(convocatoriaId, candidatoId);
             postulacion.CambiarEstado(EstadoPostulacion.Revision); // preparar estado válido para aprobar
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
 
             var postulacionRepo = new Mock<IPostulacionRepository>();
             postulacionRepo
                 .Setup(r => r.GetByIdAsync(postulacion.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(postulacion);
             postulacionRepo
-                .Setup(r => r.AddAsync(It.IsAny<Postulacion>(), It.IsAny<CancellationToken>()))
+                .Setup(r => r.UpdateAsync(It.IsAny<Postulacion>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
             var convocatoriaRepo = new Mock<IConvocatoriaRepository>();
@@ -52,7 +52,7 @@ namespace Convocatorias.Tests
             Assert.Equal(EstadoPostulacion.Aprobada.ToString(), response.Estado);
             Assert.Equal("Matemáticas", response.ConvocatoriaName);
 
-            postulacionRepo.Verify(r => r.AddAsync(It.Is<Postulacion>(p => p.Id == postulacion.Id), It.IsAny<CancellationToken>()), Times.Once);
+            postulacionRepo.Verify(r => r.UpdateAsync(It.Is<Postulacion>(p => p.Id == postulacion.Id), It.IsAny<CancellationToken>()), Times.Once);
             uow.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             Assert.False(convocatoria.estaAbierta());
         }
@@ -106,7 +106,7 @@ namespace Convocatorias.Tests
             var postulacion = new Postulacion(convocatoriaId, Guid.NewGuid());
             postulacion.CambiarEstado(EstadoPostulacion.Revision);
 
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
             convocatoria.CerrarConvocatoria();
 
             var postulacionRepo = new Mock<IPostulacionRepository>();
@@ -134,7 +134,7 @@ namespace Convocatorias.Tests
             var postulacion = new Postulacion(convocatoriaId, Guid.NewGuid());
             postulacion.CambiarEstado(EstadoPostulacion.Revision);
             postulacion.CambiarEstado(EstadoPostulacion.Aprobada);
-            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial, Guid.NewGuid());
+            var convocatoria = new Convocatoria(1, 1, 1, "Matemáticas", Modalidad.Presencial);
             var postulacionRepo = new Mock<IPostulacionRepository>();
             postulacionRepo
                 .Setup(r => r.GetByIdAsync(postulacion.Id, It.IsAny<CancellationToken>()))

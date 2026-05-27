@@ -9,7 +9,9 @@ namespace Convocatorias.Domain.Entities
         public Guid CandidatoId { get; private set; }
         public DateTime FechaPostulacion { get; private set; }
         public EstadoPostulacion Estado { get; private set; }
-    
+
+        public Postulacion() { }
+
         public Postulacion(Guid convocatoriaId, Guid candidatoId)
         {
             if (convocatoriaId == Guid.Empty)

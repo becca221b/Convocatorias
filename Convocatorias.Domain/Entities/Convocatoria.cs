@@ -18,7 +18,7 @@ namespace Convocatorias.Domain.Entities
 
         private Convocatoria() { }
 
-        public Convocatoria(int sedeId, int facultadId, int carreraId, string asignatura, Modalidad modalidad, Guid periodoInicialId)
+        public Convocatoria(int sedeId, int facultadId, int carreraId, string asignatura, Modalidad modalidad)
         {
             if (string.IsNullOrWhiteSpace(asignatura))
             {
@@ -29,10 +29,7 @@ namespace Convocatorias.Domain.Entities
             {
                 throw new ArgumentException("Sede, Facultad y Carrera deben ser válidos");
             }
-            if (periodoInicialId == Guid.Empty)
-            {
-                throw new ArgumentException("El período inicial debe ser válido");
-            }
+            
 
            
             SedeId = sedeId;
@@ -68,14 +65,21 @@ namespace Convocatorias.Domain.Entities
             return Status == Status.Abierta;
         }
 
-        public void AgregarPeriodo(ConvocatoriaPeriodo periodoConvocatoria)
+        public void AgregarPeriodo(Guid periodoId)
         {
-            if (periodoConvocatoria == null)
-            {
-                throw new ArgumentNullException(nameof(periodoConvocatoria), "El período de convocatoria no puede ser nulo");
-            }
+            if (periodoId == Guid.Empty)
+                throw new ArgumentException("El período debe ser válido.");
 
-            _periodos.Add(periodoConvocatoria);
+            if (_periodos.Any(p => p.PeriodoId == periodoId))
+                throw new InvalidOperationException("La convocatoria ya tiene asignado ese período.");
+
+            // Desactiva los actuales en memoria
+            foreach (var p in _periodos.Where(p => p.EsActual))
+                p.MarcarComoNoActual();
+
+            _periodos.Add(ConvocatoriaPeriodo.Crear(Id, periodoId));
         }
+
+        
     }
 }

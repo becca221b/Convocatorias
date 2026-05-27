@@ -24,7 +24,7 @@ namespace Convocatorias.Infraestructure.Repositories
             return await DbSet
                 .AsNoTracking()
                 .Where(c => c.Status == Status.Abierta)
-                .OrderBy(c => c.Periodos.First())
+                .OrderBy(c => c.Periodos.Max(p => p.AsignadoEn))
                 .ToListAsync(ct);
         }
 

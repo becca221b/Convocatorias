@@ -26,7 +26,7 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
             builder.Property(c => c.Status)
                 .IsRequired();
             builder.HasMany(c => c.Periodos)
-                .WithOne(cp => cp.Convocatoria)
+                .WithOne()
                 .HasForeignKey(cp => cp.ConvocatoriaId)
                 .OnDelete(DeleteBehavior.Restrict);
 

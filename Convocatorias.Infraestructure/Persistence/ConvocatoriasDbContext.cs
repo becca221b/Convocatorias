@@ -12,12 +12,12 @@ namespace Convocatorias.Infraestructure.Persistence
         public DbSet<Convocatoria> Convocatorias => Set<Convocatoria>();
         public DbSet<Periodo> Periodos => Set<Periodo>();
 
-        public DbSet<ConvocatoriaPeriodo> ConvocatoriaPeriodos => Set<ConvocatoriaPeriodo>();
+        
 
         public DbSet<Postulacion> Postulaciones => Set<Postulacion>();
         
         public DbSet<Candidato> Candidatos => Set<Candidato>(); 
-        public DbSet<Educacion> Educaciones => Set<Educacion>();
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
