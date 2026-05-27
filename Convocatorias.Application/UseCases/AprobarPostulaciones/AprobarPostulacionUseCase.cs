@@ -36,7 +36,7 @@ namespace Convocatorias.Application.UseCases.AprobarPostulaciones
             postulacion.CambiarEstado(EstadoPostulacion.Aprobada);
             convocatoria.CerrarConvocatoria();
             //Actualizar la postulación
-            await _postulacionRepository.AddAsync(postulacion);
+            await _postulacionRepository.UpdateAsync(postulacion);
             await _unitOfWork.SaveChangesAsync();
             //Respuesta
             return new AprobarPostulacionResponse
