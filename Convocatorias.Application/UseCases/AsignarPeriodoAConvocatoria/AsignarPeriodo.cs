@@ -8,14 +8,14 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
 {
     public class AsignarPeriodo
     {
-        private readonly IConvPeriodoRepository _convPeriodoRepository;
+        
         private readonly IConvocatoriaRepository _convocatoriaRepository;
         private readonly IPeriodoRepository _periodoRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AsignarPeriodo(IConvPeriodoRepository convPeriodoRepository, IConvocatoriaRepository convocatoriaRepository, IPeriodoRepository periodoRepository, IUnitOfWork unitOfWork)
+        public AsignarPeriodo(IConvocatoriaRepository convocatoriaRepository, IPeriodoRepository periodoRepository, IUnitOfWork unitOfWork)
         {
-            _convPeriodoRepository = convPeriodoRepository;
+            
             _convocatoriaRepository = convocatoriaRepository;
             _periodoRepository = periodoRepository;
             _unitOfWork = unitOfWork;
@@ -58,20 +58,18 @@ namespace Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria
                 if (convocatoria.Periodos.Any(p => p.PeriodoId == request.PeriodoId))
                         throw new ArgumentException("La convocatoria ya tiene asignado el periodo seleccionado");
 
-                //Desactivar otros periodos vigentes para la convocatoria solo puede haber uno activo por materia
-                await _convPeriodoRepository.DesactivarOtrosPeriodos(request.ConvocatoriaId);
+                //Crear convocatoria periodo             
+                convocatoria.AgregarPeriodo(request.PeriodoId);
 
-                //Crear convocatoria periodo
-                var convPeriodo = ConvocatoriaPeriodo.Crear(request.ConvocatoriaId, request.PeriodoId);
-                convocatoria.Periodos.ToList().ForEach(p => p.MarcarComoNoActual());
-                convocatoria.AgregarPeriodo(convPeriodo);
-                await _convPeriodoRepository.AddAsync(convPeriodo);
+                // Persistir el agregado modificado en el repositorio antes de commitear la UoW
+                await _convocatoriaRepository.UpdateAsync(convocatoria);
+
                 await _unitOfWork.SaveChangesAsync();
 
                 return new AsignarPeriodoResponse
                 {
-                    ConvocatoriaId = convPeriodo.ConvocatoriaId,
-                    PeriodoId = convPeriodo.PeriodoId,
+                    ConvocatoriaId = convocatoria.Id,
+                    PeriodoId = convocatoria.ObtenerPeriodoActual(),
                     FechaInicio = periodo.FechaInicio,
                     FechaFin = periodo.FechaFin,
                     PeriodoNombre = periodo.Orden + " Convocatoria " + periodo.Cuatrimestre + " Cuatrimestre " +  periodo.Anio

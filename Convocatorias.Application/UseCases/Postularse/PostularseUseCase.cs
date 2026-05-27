@@ -10,15 +10,16 @@ namespace Convocatorias.Application.UseCases.Postularse
     {
         private readonly IPostulacionRepository _postulacionRepository;
         private readonly IConvocatoriaRepository _convocatoriaRepository;
-        private readonly IConvPeriodoRepository _convocatoriaPeriodoRepository;
+      
         private readonly ICandidatoRepository _candidatoRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPeriodoRepository _periodoRepository;
 
-        public PostularseUseCase(IPostulacionRepository postulacionRepository, IConvocatoriaRepository convocatoriaRepository, IConvPeriodoRepository convocatoriaPeriodoRepository, ICandidatoRepository candidatoRepository, IUnitOfWork unitOfWork)
+        public PostularseUseCase(IPostulacionRepository postulacionRepository, IConvocatoriaRepository convocatoriaRepository, ICandidatoRepository candidatoRepository, IPeriodoRepository periodoRepository, IUnitOfWork unitOfWork)
         {
             _postulacionRepository = postulacionRepository;
             _convocatoriaRepository = convocatoriaRepository;
-            _convocatoriaPeriodoRepository = convocatoriaPeriodoRepository;
+            _periodoRepository = periodoRepository;
             _candidatoRepository = candidatoRepository;
             _unitOfWork = unitOfWork;
         }
@@ -39,9 +40,8 @@ namespace Convocatorias.Application.UseCases.Postularse
 
 
             //Verificar si es el periodo de la convocatoria es el vigente
-            var convocatoriaPeriodo = await _convocatoriaPeriodoRepository.GetByConvocatoriaIdAsync(request.ConvocatoriaId);
-            if (convocatoriaPeriodo == null || !convocatoriaPeriodo.Any(p => p.Equals(p.EsActual))) 
-                throw new InvalidOperationException("El periodo de la convocatoria no es vigente");
+           var periodoVigente = await _periodoRepository.GetVigenteAsync(DateTime.UtcNow);
+
 
 
             //Verificar que el candidato no se haya postulado previamente a esta convocatoria
