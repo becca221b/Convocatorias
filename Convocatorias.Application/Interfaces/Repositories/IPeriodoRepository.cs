@@ -9,5 +9,6 @@ namespace Convocatorias.Application.Interfaces.Repositories
         Task<IReadOnlyList<Periodo>> GetAllAsync(CancellationToken ct = default);
         Task AddAsync(Periodo periodo, CancellationToken ct = default);
         Task<Guid> GetVigenteIdAsync(CancellationToken ct = default);
+        Task<Periodo> GetVigenteAsync(DateTime fecha, CancellationToken ct = default);
     }
 }
