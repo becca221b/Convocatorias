@@ -18,4 +18,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Convocatorias.Application\Convocatorias.Application.csproj" />
+    <ProjectReference Include="..\Convocatorias.Infraestructure\Convocatorias.Infraestructure.csproj" />
+  </ItemGroup>
+
 </Project>
