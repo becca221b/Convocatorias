@@ -37,12 +37,13 @@ namespace Convocatorias.Infraestructure.DependencyInjection
             var connectionString = configuration.GetConnectionString("Postgres")
                 ?? throw new InvalidOperationException(
                     "Connection string 'Postgres' no encontrada en la configuración.");
-            
+
             //Aquí va la lógica para configurar la base de datos utilizando el connectionString
             services.AddDbContext<ConvocatoriasDbContext>(options =>
                 options.UseNpgsql(connectionString,
                     npgsqlOptions =>
                     {
+                        npgsqlOptions.MigrationsAssembly("Convocatorias.Infraestructure");
                         npgsqlOptions.EnableRetryOnFailure(
                             maxRetryCount: 3,
                             maxRetryDelay: TimeSpan.FromSeconds(5),
@@ -88,8 +89,9 @@ namespace Convocatorias.Infraestructure.DependencyInjection
             //         awsOptions["SecretAccessKey"],
             //         RegionEndpoint.GetBySystemName(awsOptions["Region"])));
             //
-            
+
             // services.AddScoped<IDocumentoStorageService, S3DocumentoStorageService>();
             return services;
         }
+    }
 }
