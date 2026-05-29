@@ -31,11 +31,16 @@ namespace Convocatorias.Infraestructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<Periodo?> GetVigenteAsync(DateTime fecha, CancellationToken ct = default)
+        public async Task<Periodo> GetVigenteAsync(DateTime fecha, CancellationToken ct = default)
         {
-            return await DbSet
+            var periodo = await DbSet
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.FechaInicio <= fecha && p.FechaFin >= fecha, ct);
+
+            if (periodo is null)
+                throw new InvalidOperationException("No existe un periodo vigente para la fecha especificada.");
+
+            return periodo;
         }
 
         public Task<Guid> GetVigenteIdAsync(CancellationToken ct = default)
