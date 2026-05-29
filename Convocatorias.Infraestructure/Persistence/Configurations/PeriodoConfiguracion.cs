@@ -21,10 +21,7 @@ namespace Convocatorias.Infraestructure.Persistence.Configurations
                 .IsRequired();
             builder.Property(p => p.FechaFin)
                 .IsRequired();
-            builder.HasMany(p => p.Convocatorias)
-                .WithOne(p => p.Periodo)
-                .HasForeignKey(p => p.PeriodoId)
-                .OnDelete(DeleteBehavior.Restrict);
+            
         }
     }
 }
