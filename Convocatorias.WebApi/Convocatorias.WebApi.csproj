@@ -16,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Convocatorias\Responses\" />
-    <Folder Include="Contracts\Convocatorias\Requests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Convocatorias.Application\Convocatorias.Application.csproj" />
     <ProjectReference Include="..\Convocatorias.Infraestructure\Convocatorias.Infraestructure.csproj" />
   </ItemGroup>
