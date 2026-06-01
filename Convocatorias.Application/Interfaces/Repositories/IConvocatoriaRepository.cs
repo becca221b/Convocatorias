@@ -6,6 +6,7 @@ namespace Convocatorias.Application.Interfaces.Repositories
     {      
             Task<Convocatoria?> GetByIdAsync(Guid id, CancellationToken ct= default);
             Task<List<Convocatoria>> GetAllAsync(CancellationToken ct= default);
+            Task<List<Convocatoria>> GetAbiertasAsync(CancellationToken ct= default);
             Task AddAsync(Convocatoria convocatoria, CancellationToken ct= default);
             Task UpdateAsync(Convocatoria convocatoria, CancellationToken ct= default);
             Task DeleteAsync(Guid id, CancellationToken ct= default);
