@@ -47,5 +47,12 @@ namespace Convocatorias.Infraestructure.Repositories
             DbSet.Update(convocatoria);
             return Task.CompletedTask;
         }
+        public async Task<List<Convocatoria>> GetAbiertasAsync(CancellationToken ct = default)
+        {
+            return await DbSet
+                .Where(c => c.Status == Status.Abierta)
+                .OrderBy(c => c.Periodos.Max(p => p.AsignadoEn))
+                .ToListAsync(ct);
+        }
     }
 }
