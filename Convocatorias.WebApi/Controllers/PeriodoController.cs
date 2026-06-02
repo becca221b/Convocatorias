@@ -1,6 +1,4 @@
-﻿using Convocatorias.Application.Interfaces;
-using Convocatorias.Application.Interfaces.Repositories;
-using Convocatorias.Application.UseCases.Periodos.Create;
+﻿using Convocatorias.Application.UseCases.Periodos.Create;
 using Convocatorias.Application.UseCases.Periodos.Get;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,15 +13,15 @@ namespace Convocatorias.WebApi.Controllers
         private readonly PeriodoCreateUseCase _createUseCase;
         private readonly PeriodoGetAllUseCase _getAllUseCase;
         private readonly PeriodoGetByIdUseCase _periodoGetById;
-        private readonly PeriodoGetVigenteId _periodoGetVigenteId;
+       
         private readonly PeriodoGetVigenteUseCase _periodoGetVigente;
 
-        public PeriodoController(PeriodoGetAllUseCase getAllUseCase, PeriodoCreateUseCase createUseCase, PeriodoGetByIdUseCase periodoGetById, PeriodoGetVigenteId periodoGetVigenteId, PeriodoGetVigenteUseCase periodoGetVigente)
+        public PeriodoController(PeriodoGetAllUseCase getAllUseCase, PeriodoCreateUseCase createUseCase, PeriodoGetByIdUseCase periodoGetById, PeriodoGetVigenteUseCase periodoGetVigente)
         {
             _createUseCase = createUseCase;
             _getAllUseCase = getAllUseCase;
             _periodoGetById = periodoGetById;
-            _periodoGetVigenteId = periodoGetVigenteId;
+            
             _periodoGetVigente = periodoGetVigente;
 
         }
@@ -37,7 +35,7 @@ namespace Convocatorias.WebApi.Controllers
         }
 
         // GET api/<PeriodoController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var response = await _periodoGetById.ExecuteAsync(id);
@@ -54,14 +52,7 @@ namespace Convocatorias.WebApi.Controllers
             return Ok(response);
         }
 
-        //GET api/<PeriodoController>/vigenteId
-        [HttpGet("vigenteId")]
-        public async Task<IActionResult> GetVigenteId()
-        {
-            var response = await _periodoGetVigenteId.ExecuteAsync();
-            if (response is null) return NotFound();
-            return Ok(response);
-        }
+        
 
         // POST api/<PeriodoController>
         [HttpPost]
@@ -69,7 +60,7 @@ namespace Convocatorias.WebApi.Controllers
         {
             
             var response = await _createUseCase.HandleAsync(request);
-            return Ok(response);
+            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
 
         // PUT api/<PeriodoController>/5
