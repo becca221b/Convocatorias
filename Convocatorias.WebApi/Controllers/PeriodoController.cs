@@ -57,6 +57,14 @@ namespace Convocatorias.WebApi.Controllers
             return Ok(periodo);
         }
 
+        //Post api/<PeriodoController>
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] PeriodoCreateRequest request, CancellationToken ct)
+        {
+            var periodoId = await _createUseCase.HandleAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = periodoId }, null);
+        }
+
         // PUT api/<PeriodoController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
