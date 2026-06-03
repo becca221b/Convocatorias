@@ -1,20 +1,41 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Convocatorias.Application.Interfaces.Repositories;
+using Convocatorias.Application.UseCases.Postulaciones.Get;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Convocatorias.WebApi.Controllers
 {
     public class PostulacionController : Controller
     {
-        // GET: PostulacionController
-        public ActionResult Index()
+        private readonly GetAll _getAllUseCase;
+        private readonly GetById _getByIdUse;
+        private readonly GetPostulacionesByConvocatoriaId _getByConvocatoriaIdUseCase;
+
+        public PostulacionController(GetAll getAllUseCase, GetById getByIdUse, GetPostulacionesByConvocatoriaId getByConvocatoriaIdUseCase)
         {
-            return View();
+            _getAllUseCase = getAllUseCase;
+            _getByIdUse = getByIdUse;
+            _getByConvocatoriaIdUseCase = getByConvocatoriaIdUseCase;
         }
 
-        // GET: PostulacionController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        // GET: PostulacionController
+        public async Task<ActionResult> GetAll(CancellationToken ct)
         {
-            return View();
+            var postulaciones = await _getAllUseCase.ExecuteAsync(ct);
+            return View(postulaciones);
+        }
+
+        // GET: PostulacionController/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(Guid id)
+        {
+            var postulacion = await _getByIdUse.ExecuteAsync(id, CancellationToken.None);
+            if (postulacion == null)
+            {
+                return NotFound();
+            }
+            return View(postulacion);
         }
 
         // GET: PostulacionController/Create
