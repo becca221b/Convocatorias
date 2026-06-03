@@ -1,4 +1,6 @@
-﻿using Convocatorias.Application.UseCases.Periodos.Create;
+﻿using Convocatorias.Application.Interfaces.Repositories;
+using Convocatorias.Application.UseCases.Convocatorias.Create;
+using Convocatorias.Application.UseCases.Periodos.Create;
 using Convocatorias.Application.UseCases.Periodos.Get;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,59 +10,51 @@ namespace Convocatorias.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PeriodoController : ControllerBase
+    public sealed class PeriodoController : ControllerBase
     {
         private readonly PeriodoCreateUseCase _createUseCase;
         private readonly PeriodoGetAllUseCase _getAllUseCase;
-        private readonly PeriodoGetByIdUseCase _periodoGetById;
-       
-        private readonly PeriodoGetVigenteUseCase _periodoGetVigente;
+        private readonly PeriodoGetByIdUseCase _getByIdUseCase;
+        private readonly PeriodoGetVigenteUseCase _getVigenteUseCase;
 
-        public PeriodoController(PeriodoGetAllUseCase getAllUseCase, PeriodoCreateUseCase createUseCase, PeriodoGetByIdUseCase periodoGetById, PeriodoGetVigenteUseCase periodoGetVigente)
+        public PeriodoController(PeriodoCreateUseCase createUseCase, PeriodoGetAllUseCase getAllUseCase, PeriodoGetByIdUseCase getByIdUseCase, PeriodoGetVigenteUseCase getVigenteUseCase)
         {
             _createUseCase = createUseCase;
             _getAllUseCase = getAllUseCase;
-            _periodoGetById = periodoGetById;
-            
-            _periodoGetVigente = periodoGetVigente;
-
+            _getByIdUseCase = getByIdUseCase;
+            _getVigenteUseCase = getVigenteUseCase;
         }
-
         // GET: api/<PeriodoController>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken ct)
         {
-            var response = await _getAllUseCase.ExecuteAsync();
-            return Ok(response);
+            var periodos = await _getAllUseCase.ExecuteAsync(ct);
+            return Ok(periodos);
+
         }
 
         // GET api/<PeriodoController>/5
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
         {
-            var response = await _periodoGetById.ExecuteAsync(id);
-            if (response is null) return NotFound();
-            return Ok(response);
+            var periodo = await _getByIdUseCase.ExecuteAsync(id, ct);
+            if (periodo == null)
+            {
+                return NotFound();
+            }
+            return Ok(periodo);
         }
 
-        //GET api/<PeriodoController>/vigente
+        // GET api/<PeriodoController>/vigente
         [HttpGet("vigente")]
-        public async Task<IActionResult> GetVigente()
+        public async Task<IActionResult> GetVigente(CancellationToken ct)
         {
-            var response = await _periodoGetVigente.ExecuteAsync();
-            if (response is null) return NotFound();
-            return Ok(response);
-        }
-
-        
-
-        // POST api/<PeriodoController>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] PeriodoCreateRequest request)
-        {
-            
-            var response = await _createUseCase.HandleAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+            var periodo = await _getVigenteUseCase.ExecuteAsync(ct);
+            if (periodo == null)
+            {
+                return NotFound();
+            }
+            return Ok(periodo);
         }
 
         // PUT api/<PeriodoController>/5
