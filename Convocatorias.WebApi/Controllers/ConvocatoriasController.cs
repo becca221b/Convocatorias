@@ -3,6 +3,7 @@ using Convocatorias.Application.UseCases.Convocatorias.GetAll;
 using System.Threading.Tasks;
 using Convocatorias.Application.UseCases.Convocatorias.Create;
 using Convocatorias.Application.UseCases.Convocatorias.Get;
+using Convocatorias.Application.UseCases.AsignarPeriodoAConvocatoria;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,12 +16,14 @@ namespace Convocatorias.WebApi.Controllers
         private readonly ConvGetAllUseCase _getAllUseCase;
         private readonly ConvCreateUseCase _createUseCase;
         private readonly ConvGetByIdUseCase _getByIdUseCase;
+        private readonly AsignarPeriodo _asignarPeriodo;
 
-        public ConvocatoriasController(ConvGetAllUseCase getAllUseCase, ConvCreateUseCase createUseCase, ConvGetByIdUseCase getByIdUseCase)
+        public ConvocatoriasController(ConvGetAllUseCase getAllUseCase, ConvCreateUseCase createUseCase, ConvGetByIdUseCase getByIdUseCase, AsignarPeriodo asignarPeriodo)
         {
             _getAllUseCase = getAllUseCase;
             _createUseCase = createUseCase;
             _getByIdUseCase = getByIdUseCase;
+            _asignarPeriodo = asignarPeriodo;
         }
         // GET: api/convocatorias
         [HttpGet]
@@ -32,9 +35,9 @@ namespace Convocatorias.WebApi.Controllers
 
         // GET api/<ConvocatoriaController>/5
         [HttpGet("{id}")]
-        public async Task<string> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var convocatoria = await _getByIdUseCase.ExecuteAsync(Guid.Parse(id.ToString())));
+            var convocatoria = await _getByIdUseCase.ExecuteAsync(Guid.Parse(id.ToString()));
             return Ok(convocatoria);
         }
 
@@ -46,16 +49,12 @@ namespace Convocatorias.WebApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
 
-        // PUT api/<ConvocatoriaController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch("periodo")]
+        public async Task<IActionResult> AsignarPeriodo([FromBody] AsignarPeriodoRequest request, CancellationToken ct)
         {
+            var response = await _asignarPeriodo.Asignar(request);
+            return Ok(response);
         }
 
-        // DELETE api/<ConvocatoriaController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
