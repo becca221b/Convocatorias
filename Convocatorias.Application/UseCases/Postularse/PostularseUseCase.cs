@@ -24,12 +24,11 @@ namespace Convocatorias.Application.UseCases.Postularse
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PostularseResponse> Postular(PostularseRequest request)
+        public async Task<PostularseResponse> Postular(PostularseRequest request, CancellationToken ct)
         {
 
             //Obtener convocatoria
-            var convocatoria = await _convocatoriaRepository.GetByIdAsync(request.ConvocatoriaId);
-
+            var convocatoria = await _convocatoriaRepository.GetByIdAsync(request.ConvocatoriaId, ct);  
             if (convocatoria == null)
                 throw new ArgumentException("Convocatoria no encontrada");
             
