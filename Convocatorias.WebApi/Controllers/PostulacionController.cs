@@ -1,5 +1,6 @@
 ﻿using Convocatorias.Application.Interfaces.Repositories;
 using Convocatorias.Application.UseCases.Postulaciones.Get;
+using Convocatorias.Application.UseCases.Postularse;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +11,14 @@ namespace Convocatorias.WebApi.Controllers
         private readonly GetAll _getAllUseCase;
         private readonly GetById _getByIdUse;
         private readonly GetPostulacionesByConvocatoriaId _getByConvocatoriaIdUseCase;
+        private readonly PostularseUseCase _createUseCase;
 
         public PostulacionController(GetAll getAllUseCase, GetById getByIdUse, GetPostulacionesByConvocatoriaId getByConvocatoriaIdUseCase)
         {
             _getAllUseCase = getAllUseCase;
             _getByIdUse = getByIdUse;
             _getByConvocatoriaIdUseCase = getByConvocatoriaIdUseCase;
+            
         }
 
         [HttpGet]
@@ -35,70 +38,21 @@ namespace Convocatorias.WebApi.Controllers
             {
                 return NotFound();
             }
-            return View(postulacion);
+            return Ok(postulacion);
         }
 
-        // GET: PostulacionController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        
 
-        // POST: PostulacionController/Create
+        // POST: api/PostulacionController
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Postularse([FromBody] PostularseRequest request, CancellationToken ct)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var createdPostulacion = await _createUseCase.Postular(request, ct);
+            return CreatedAtAction(nameof(GetById), new { id = createdPostulacion.PostulacionId }, createdPostulacion);
         }
 
-        // GET: PostulacionController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+       
 
-        // POST: PostulacionController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: PostulacionController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: PostulacionController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }
