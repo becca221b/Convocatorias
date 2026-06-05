@@ -16,15 +16,15 @@ namespace Convocatorias.Application.UseCases.AprobarPostulaciones
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<AprobarPostulacionResponse> Aprobar(AprobarPostulacionRequest request)
+        public async Task<AprobarPostulacionResponse> Aprobar(AprobarPostulacionRequest request, CancellationToken ct)
         {
             //Obtener postulación
-            var postulacion = await _postulacionRepository.GetByIdAsync(request.PostulacionId);
+            var postulacion = await _postulacionRepository.GetByIdAsync(request.PostulacionId, ct);
             if (postulacion == null)
                 throw new ArgumentException("Postulación no encontrada");
 
             //Obtener convocatoria
-            var convocatoria = await _convocatoriaRepository.GetByIdAsync(postulacion.ConvocatoriaId);
+            var convocatoria = await _convocatoriaRepository.GetByIdAsync(postulacion.ConvocatoriaId, ct);
             if (convocatoria == null)
                 throw new ArgumentException("Convocatoria no encontrada");
 
