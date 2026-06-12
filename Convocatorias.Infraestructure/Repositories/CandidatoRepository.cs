@@ -38,5 +38,19 @@ namespace Convocatorias.Infraestructure.Repositories
             DbSet.Update(candidato);
             await Task.CompletedTask;
         }
-    }
+
+        public async Task<(IReadOnlyCollection<Candidato> Items, int TotalItems)> GetPagedAsync(int page, int pageSize, CancellationToken ct = default)
+        {
+            var totalItems = await DbSet.CountAsync(ct);
+            var items = await DbSet
+                .Include(c => c.Educaciones)
+                .Include(c => c.ExperienciasDocente)
+                .Include(c => c.ExperienciasInvExt)
+                .OrderBy(c => c.Apellido)
+                .ThenBy(c => c.Nombre)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(ct);
+            return (items.AsReadOnly(), totalItems);
+        }
 }

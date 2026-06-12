@@ -12,6 +12,6 @@ namespace Convocatorias.Application.Interfaces.Repositories
             Task<Candidato?> GetByIdAsync(Guid id, CancellationToken ct = default);
             Task<List<Candidato>> GetAllAsync(CancellationToken ct = default);
             Task AddAsync(Candidato candidato, CancellationToken ct = default);
-            
+            Task<(IReadOnlyCollection<Candidato> Items, int TotalItems)> GetPagedAsync(int page, int pageSize, CancellationToken ct = default);
     }
 }
