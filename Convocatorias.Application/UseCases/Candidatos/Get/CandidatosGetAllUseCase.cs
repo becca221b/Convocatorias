@@ -30,19 +30,26 @@ namespace Convocatorias.Application.UseCases.Candidatos.Get
                     c.TieneDocumentacionRequerida(),
                     c.Educaciones
                         .Select(e => new EducacionResponse(
-                            // Mapear propiedades de Educacion a EducacionResponse aquí
+                            Titulo: e.TituloGrado,
+                            AnioGraduacion: e.AnioGraduacion
                         ))
                         .ToList()
                         .AsReadOnly(),
                     c.ExperienciasDocente
                         .Select(ed => new ExperienciaDocenteResponse(
-                            // Mapear propiedades de ExperienciaDocente a ExperienciaDocenteResponse aquí
+                            Materia: ed.Cargo, // Asumiendo que "Cargo" representa la materia impartida
+                            Institucion: ed.Institucion,
+                            FechaInicio: ed.DesdePeriodo,
+                            FechaFin: ed.HastaPeriodo
                         ))
                         .ToList()
                         .AsReadOnly(),
                     c.ExperienciasInvExt
                         .Select(ei => new ExperienciaInvExtResponse(
-                            // Mapear propiedades de ExperienciaInvExt a ExperienciaInvExtResponse aquí
+                            Descripcion: ei.Descripcion,
+                            TipoExperiencia: ei.Tipo.ToString(), // Convertir el enum a string para la respuesta
+                            TieneExperiencia: ei.TieneExperiencia,
+                            ParticipacionInvExt: ei.ParticipoComo.ToString() // Convertir el enum a string para la respuesta
                         ))
                         .ToList()
                         .AsReadOnly()
