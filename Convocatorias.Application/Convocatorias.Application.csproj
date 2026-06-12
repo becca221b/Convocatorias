@@ -31,4 +31,9 @@
     <ProjectReference Include="..\Convocatorias.Domain\Convocatorias.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\ExperienciaDocente\" />
+    <Folder Include="UseCases\ExperienciaInvExt\" />
+  </ItemGroup>
+
 </Project>
