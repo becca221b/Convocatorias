@@ -1,4 +1,5 @@
 ﻿using Convocatorias.Application.UseCases.Candidatos.Create;
+using Convocatorias.Application.UseCases.Candidatos.Get;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,9 +25,15 @@ namespace Convocatorias.WebApi.Controllers
         
         // GET: api/<CandidatoController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> 
+            GetAll([FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            CancellationToken ct = default)
         {
-            return new string[] { "value1", "value2" };
+            var res = await _sender.Send(
+                new CandidatoGetAllRequest(page, pageSize), ct);
+            
+            return Ok(res);
         }
 
         // GET api/<CandidatoController>/5
