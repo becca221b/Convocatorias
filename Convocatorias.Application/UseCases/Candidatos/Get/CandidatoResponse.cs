@@ -32,8 +32,9 @@ namespace Convocatorias.Application.UseCases.Candidatos.Get
         public sealed record ExperienciaInvExtResponse
         (
             string Descripcion,
-            string Institucion,
-            DateTime FechaInicio,
-            DateTime? FechaFin
-        );
+         
+            bool TieneExperiencia
+,
+            string TipoExperiencia,
+            string ParticipacionInvExt);
 }
