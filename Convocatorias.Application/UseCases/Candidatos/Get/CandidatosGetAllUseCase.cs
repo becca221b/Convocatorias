@@ -1,14 +1,11 @@
-﻿using Convocatorias.Application.Interfaces.Repositories;
+﻿using Convocatorias.Application.Common;
+using Convocatorias.Application.Interfaces.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Convocatorias.Application.UseCases.Candidatos.Get
 {
-    public sealed class CandidatosGetAllUseCase : IRequestHandler<CandidatoGetAllRequest, IReadOnlyCollection<CandidatoResponse>>
+    public sealed class CandidatosGetAllUseCase : IRequestHandler<CandidatoGetAllRequest, PagedResult<CandidatoResponse>>
     {
         private readonly ICandidatoRepository _candidatoRepository;
 
@@ -18,39 +15,47 @@ namespace Convocatorias.Application.UseCases.Candidatos.Get
         }
         
         
-        public Task<IReadOnlyCollection<CandidatoResponse>> Handle(CandidatoGetAllRequest request, CancellationToken cancellationToken)
+        public async Task<PagedResult<CandidatoResponse>> Handle(
+            CandidatoGetAllRequest request,
+            CancellationToken cancellationToken)
         {
-            var candidatos = _candidatoRepository.GetAllAsync(cancellationToken);
+            var (candidatos, totalCandidatos) = await _candidatoRepository.GetPagedAsync(request.Page, request.PageSize, cancellationToken);
 
-            return candidatos
-                .Select(
-                    c => new CandidatoResponse(
-                        c.Id,
-                        c.Nombre,
-                        c.Apellido,
-                        c.Email,
-                        c.TieneDocumentacionRequerida(),
-                        c.Educaciones.Select(e => new CandidatoResponse.EducacionResponse(
-                            e.Institucion,
-                            e.Titulo,
-                            e.AnioGraduacion
-                        )).ToList(),
-                        c.ExperienciaDocente.Select(ed => new CandidatoResponse.ExperienciaDocenteResponse(
-                            ed.Materia,
-                            ed.Institucion,
-                            ed.FechaInicio,
-                            ed.FechaFin
-                        )).ToList(),
-                        c.ExperienciasInvExt.Select(ei => new CandidatoResponse.ExperienciaInvExtResponse(
-                            ei.Descripcion,
-                            ei.Institucion,
-                            ei.FechaInicio,
-                            ei.FechaFin
-                        )).ToList()
-                    )
-                )
+            var items = candidatos
+                .Select(c => new CandidatoResponse(
+                    c.Id,
+                    c.Nombre,
+                    c.Apellido,
+                    c.Email,
+                    c.TieneDocumentacionRequerida(),
+                    c.Educaciones
+                        .Select(e => new EducacionResponse(
+                            // Mapear propiedades de Educacion a EducacionResponse aquí
+                        ))
+                        .ToList()
+                        .AsReadOnly(),
+                    c.ExperienciasDocente
+                        .Select(ed => new ExperienciaDocenteResponse(
+                            // Mapear propiedades de ExperienciaDocente a ExperienciaDocenteResponse aquí
+                        ))
+                        .ToList()
+                        .AsReadOnly(),
+                    c.ExperienciasInvExt
+                        .Select(ei => new ExperienciaInvExtResponse(
+                            // Mapear propiedades de ExperienciaInvExt a ExperienciaInvExtResponse aquí
+                        ))
+                        .ToList()
+                        .AsReadOnly()
+                ))
                 .ToList()
                 .AsReadOnly();
+
+            return new PagedResult<CandidatoResponse>(
+                request.Page,
+                request.PageSize,
+                totalCandidatos,
+                items
+            );
         }
     }
 }

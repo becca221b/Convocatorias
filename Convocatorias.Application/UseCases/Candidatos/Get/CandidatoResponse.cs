@@ -16,7 +16,7 @@ namespace Convocatorias.Application.UseCases.Candidatos.Get
 
         public sealed record EducacionResponse
         (
-            string Institucion,
+            
             string Titulo,
             int AnioGraduacion
         );
