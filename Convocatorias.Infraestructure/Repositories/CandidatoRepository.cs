@@ -44,7 +44,7 @@ namespace Convocatorias.Infraestructure.Repositories
             var totalItems = await DbSet.CountAsync(ct);
             var items = await DbSet
                 .Include(c => c.Educaciones)
-                    .ThenInclude(e=> e.Documentos)
+                    .ThenInclude(e => e.Documentos)
                 .Include(c => c.ExperienciasDocente)
                     .ThenInclude(ed => ed.Documentos)
                 .Include(c => c.ExperienciasInvExt)
@@ -56,4 +56,5 @@ namespace Convocatorias.Infraestructure.Repositories
                 .ToListAsync(ct);
             return (items.AsReadOnly(), totalItems);
         }
+    }
 }
