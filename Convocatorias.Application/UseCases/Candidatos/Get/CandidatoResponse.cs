@@ -16,25 +16,40 @@ namespace Convocatorias.Application.UseCases.Candidatos.Get
 
         public sealed record EducacionResponse
         (
-            
-            string Titulo,
-            int AnioGraduacion
+            Guid Id,
+            string TituloGrado,
+            int AnioGraduacion,
+            string PosgradoStatus,
+            string PosgradoNombre,
+            string TipoFormacion,
+            IReadOnlyCollection<DocumentoResponse> Documentos
         );
 
         public sealed record ExperienciaDocenteResponse
         (
-            string Materia,
+            Guid Id,
+            int AniosExperiencia,
+            string Nivel,
             string Institucion,
-            DateTime FechaInicio,
-            DateTime? FechaFin
+            string Cargo,
+            DateTime DesdePeriodo,
+            DateTime HastaPeriodo,
+            IReadOnlyCollection<DocumentoResponse> Documentos
         );
 
         public sealed record ExperienciaInvExtResponse
         (
+            Guid Id,
+            string Tipo,
+            bool TieneExperiencia,
+            string ParticipoComo,
             string Descripcion,
-         
-            bool TieneExperiencia
-,
-            string TipoExperiencia,
-            string ParticipacionInvExt);
+            IReadOnlyCollection<DocumentoResponse> Documentos
+        );
+
+        public sealed record DocumentoResponse(
+            Guid Id,
+            string TipoDocumento,
+            string Url
+        );
 }

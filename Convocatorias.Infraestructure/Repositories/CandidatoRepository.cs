@@ -44,8 +44,11 @@ namespace Convocatorias.Infraestructure.Repositories
             var totalItems = await DbSet.CountAsync(ct);
             var items = await DbSet
                 .Include(c => c.Educaciones)
+                    .ThenInclude(e=> e.Documentos)
                 .Include(c => c.ExperienciasDocente)
+                    .ThenInclude(ed => ed.Documentos)
                 .Include(c => c.ExperienciasInvExt)
+                    .ThenInclude(eie => eie.Documentos)
                 .OrderBy(c => c.Apellido)
                 .ThenBy(c => c.Nombre)
                 .Skip((page - 1) * pageSize)

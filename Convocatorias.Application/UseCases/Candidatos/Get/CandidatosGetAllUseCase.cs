@@ -1,6 +1,7 @@
 ﻿using Convocatorias.Application.Common;
 using Convocatorias.Application.Interfaces.Repositories;
 using MediatR;
+using System.Linq;
 
 
 namespace Convocatorias.Application.UseCases.Candidatos.Get
@@ -30,26 +31,58 @@ namespace Convocatorias.Application.UseCases.Candidatos.Get
                     c.TieneDocumentacionRequerida(),
                     c.Educaciones
                         .Select(e => new EducacionResponse(
-                            Titulo: e.TituloGrado,
-                            AnioGraduacion: e.AnioGraduacion
+                            e.Id,
+                            e.TituloGrado,
+                            e.AnioGraduacion,
+                            e.PosgradoStatus.ToString(), // <-- Conversión explícita a string
+                            e.PosgradoNombre,
+                            e.TipoFormacion,
+                            e.Documentos
+                                .Select(d => new DocumentoResponse(
+                                    d.Id,
+                                    d.TipoDocumento,
+                                    d.Url
+                                ))
+                                .ToList()
+                                .AsReadOnly()
                         ))
                         .ToList()
                         .AsReadOnly(),
-                    c.ExperienciasDocente
+                        c.ExperienciasDocente
                         .Select(ed => new ExperienciaDocenteResponse(
-                            Materia: ed.Cargo, // Asumiendo que "Cargo" representa la materia impartida
-                            Institucion: ed.Institucion,
-                            FechaInicio: ed.DesdePeriodo,
-                            FechaFin: ed.HastaPeriodo
+                            ed.Id,
+                            ed.AniosExperiencia,
+                            ed.Nivel.ToString(),
+                            ed.Institucion,
+                            ed.Cargo,
+                            ed.DesdePeriodo,
+                            ed.HastaPeriodo,
+                            ed.Documentos
+                                .Select(d => new DocumentoResponse(
+                                    d.Id,
+                                    d.TipoDocumento,
+                                    d.Url
+                                ))
+                                .ToList()
+                                .AsReadOnly()
                         ))
                         .ToList()
                         .AsReadOnly(),
-                    c.ExperienciasInvExt
+                        c.ExperienciasInvExt
                         .Select(ei => new ExperienciaInvExtResponse(
-                            Descripcion: ei.Descripcion,
-                            TipoExperiencia: ei.Tipo.ToString(), // Convertir el enum a string para la respuesta
-                            TieneExperiencia: ei.TieneExperiencia,
-                            ParticipacionInvExt: ei.ParticipoComo.ToString() // Convertir el enum a string para la respuesta
+                            ei.Id,
+                            ei.Tipo.ToString(),
+                            ei.TieneExperiencia,
+                            ei.ParticipoComo.ToString(),
+                            ei.Descripcion,
+                            ei.Documentos
+                                .Select(d => new DocumentoResponse(
+                                    d.Id,
+                                    d.TipoDocumento,
+                                    d.Url
+                                ))
+                                .ToList()
+                                .AsReadOnly()
                         ))
                         .ToList()
                         .AsReadOnly()
